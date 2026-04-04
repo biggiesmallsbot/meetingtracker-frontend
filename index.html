@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MeetingTracker — Red Penguin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#FFFFFF;--bg2:#F7F7F5;--bg3:#EFEEEB;--border:#E8E7E3;--border2:#D6D5CF;
+  --text:#1A1A1A;--text2:#6B6B6B;--text3:#ABABAB;
+  --accent:#2F6FED;--accent-bg:#EEF3FE;
+  --green:#2D9E6E;--green-bg:#EDFAF4;
+  --red:#D44C47;--red-bg:#FDECEA;
+  --amber:#C08B1A;--amber-bg:#FEF6E4;
+  --sans:'DM Sans',system-ui,sans-serif;--mono:'DM Mono',monospace;
+}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14px;line-height:1.5;}
+::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
+
+.shell{display:flex;min-height:100vh;}
+.sidebar{width:240px;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;overflow-y:auto;}
+.sidebar-top{padding:16px 12px 12px;}
+.workspace{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:6px;cursor:pointer;transition:background .15s;}
+.workspace:hover{background:var(--bg3);}
+.ws-icon{width:28px;height:28px;border-radius:6px;background:#1A1A1A;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;font-family:var(--mono);flex-shrink:0;}
+.ws-name{font-size:13px;font-weight:600;}
+.ws-plan{font-size:11px;color:var(--text3);font-family:var(--mono);}
+.sidebar-section{padding:4px 12px;margin-top:8px;}
+.sidebar-label{font-size:11px;color:var(--text3);font-weight:500;letter-spacing:.06em;text-transform:uppercase;padding:6px 8px;font-family:var(--mono);}
+.nav-item{display:flex;align-items:center;gap:9px;padding:6px 8px;border-radius:5px;cursor:pointer;color:var(--text2);font-size:13.5px;transition:all .12s;user-select:none;border:none;background:none;width:100%;text-align:left;font-family:var(--sans);}
+.nav-item:hover{background:var(--bg3);color:var(--text);}
+.nav-item.active{background:var(--bg3);color:var(--text);font-weight:500;}
+.nav-icon{width:18px;opacity:.6;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.nav-item.active .nav-icon{opacity:.85;}
+.nav-badge{margin-left:auto;background:var(--red-bg);color:var(--red);font-size:10px;font-family:var(--mono);font-weight:500;padding:1px 7px;border-radius:20px;}
+.sidebar-footer{margin-top:auto;padding:12px;border-top:1px solid var(--border);}
+.status-row{display:flex;align-items:center;gap:7px;padding:3px 0;}
+.status-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.status-label{font-size:11px;color:var(--text3);font-family:var(--mono);}
+
+.main{margin-left:240px;flex:1;padding:40px 48px;}
+.page-header{margin-bottom:32px;}
+.page-title{font-size:26px;font-weight:600;letter-spacing:-.02em;}
+.page-sub{font-size:14px;color:var(--text2);margin-top:4px;}
+
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:32px;}
+.stat-row-3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:32px;}
+.stat{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:16px 18px;}
+.stat-label{font-size:11px;color:var(--text3);font-weight:500;letter-spacing:.05em;text-transform:uppercase;font-family:var(--mono);}
+.stat-val{font-size:24px;font-weight:600;margin-top:6px;letter-spacing:-.02em;}
+.stat-sub{font-size:12px;color:var(--text3);margin-top:3px;}
+.stat-danger{background:var(--red-bg);border-color:#F5C4C4;}
+.stat-danger .stat-label{color:var(--red);}
+.stat-danger .stat-sub{color:var(--red);opacity:.6;}
+
+.section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.section-title{font-size:13px;font-weight:600;color:var(--text);letter-spacing:-.01em;}
+.section-action{font-size:12px;color:var(--accent);cursor:pointer;background:none;border:none;font-family:var(--sans);padding:0;}
+.section-action:hover{text-decoration:underline;}
+
+.card{background:var(--bg);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:24px;}
+.table-head{display:grid;padding:9px 16px;background:var(--bg2);border-bottom:1px solid var(--border);font-size:11px;color:var(--text3);font-weight:500;letter-spacing:.05em;text-transform:uppercase;font-family:var(--mono);}
+.table-row{display:grid;padding:12px 16px;border-bottom:1px solid var(--border);align-items:center;transition:background .1s;cursor:pointer;}
+.table-row:last-child{border-bottom:none;}
+.table-row:hover{background:var(--bg2);}
+
+.g-items{grid-template-columns:2fr 1fr 110px 80px 90px;}
+.g-meetings{grid-template-columns:2fr 110px 80px 90px 90px;}
+.g-email{grid-template-columns:1.6fr 2fr 80px 70px 90px;}
+.g-team{grid-template-columns:2fr 100px 70px 70px 80px;}
+
+.cell-main{font-size:13.5px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.cell-sub{font-size:12px;color:var(--text3);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.cell{font-size:13px;color:var(--text2);}
+.cell-mono{font-size:12px;color:var(--text2);font-family:var(--mono);}
+
+.badge{display:inline-flex;align-items:center;gap:5px;padding:2px 9px;border-radius:4px;font-size:11px;font-weight:500;font-family:var(--mono);white-space:nowrap;}
+.badge-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;}
+.b-open{background:var(--bg3);color:var(--text3);}.b-open .badge-dot{background:var(--text3);}
+.b-progress{background:var(--amber-bg);color:var(--amber);}.b-progress .badge-dot{background:var(--amber);}
+.b-done{background:var(--green-bg);color:var(--green);}.b-done .badge-dot{background:var(--green);}
+.b-overdue{background:var(--red-bg);color:var(--red);}.b-overdue .badge-dot{background:var(--red);}
+
+.prio{font-size:11px;font-family:var(--mono);font-weight:500;}
+.p-high{color:var(--red);}.p-med{color:var(--amber);}.p-low{color:var(--text3);}
+
+.avatar{border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:600;color:#fff;flex-shrink:0;font-family:var(--mono);}
+.assignee-cell{display:flex;align-items:center;gap:7px;}
+.avatar-stack{display:flex;align-items:center;}
+.avatar-overflow{border-radius:50%;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--text3);font-family:var(--mono);}
+
+.filter-row{display:flex;align-items:center;gap:8px;margin-bottom:16px;}
+.filter-btn{font-size:12px;padding:5px 12px;border-radius:5px;border:1px solid var(--border);background:var(--bg);color:var(--text2);cursor:pointer;font-family:var(--sans);transition:all .12s;}
+.filter-btn:hover{background:var(--bg3);border-color:var(--border2);color:var(--text);}
+.filter-btn.active{background:var(--bg3);border-color:var(--border2);color:var(--text);font-weight:500;}
+.filter-count{color:var(--text3);font-family:var(--mono);font-size:11px;margin-left:3px;}
+
+.team-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px;}
+.team-card{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:16px 20px;display:flex;align-items:center;gap:14px;}
+.member-name{font-size:14px;font-weight:500;}
+.member-email{font-size:11px;color:var(--text3);font-family:var(--mono);margin-top:2px;}
+.member-stats{font-size:11px;font-family:var(--mono);color:var(--text3);margin-top:8px;}
+
+.zoom-pill{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-family:var(--mono);background:var(--accent-bg);color:var(--accent);padding:3px 10px;border-radius:4px;}
+
+.empty{display:flex;align-items:center;justify-content:center;padding:48px;color:var(--text3);font-size:13px;}
+
+.screen{animation:fadeIn .2s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+<div class="shell">
+
+<!-- Sidebar -->
+<aside class="sidebar">
+  <div class="sidebar-top">
+    <div class="workspace">
+      <div class="ws-icon">RP</div>
+      <div>
+        <div class="ws-name">Red Penguin</div>
+        <div class="ws-plan">via Zoom · Beta</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-label">Workspace</div>
+    <button class="nav-item active" onclick="show('dashboard')">
+      <span class="nav-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="6" height="6" rx="1.5" fill="currentColor" opacity=".7"/><rect x="9" y="1" width="6" height="6" rx="1.5" fill="currentColor" opacity=".7"/><rect x="1" y="9" width="6" height="6" rx="1.5" fill="currentColor" opacity=".7"/><rect x="9" y="9" width="6" height="6" rx="1.5" fill="currentColor" opacity=".7"/></svg></span>
+      Dashboard
+    </button>
+    <button class="nav-item" onclick="show('items')">
+      <span class="nav-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M2 4h12M2 8h8M2 12h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+      Action Items
+      <span class="nav-badge">2 overdue</span>
+    </button>
+    <button class="nav-item" onclick="show('meetings')">
+      <span class="nav-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.3"/><path d="M8 5v3.5l2 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></span>
+      Meetings
+    </button>
+    <button class="nav-item" onclick="show('email')">
+      <span class="nav-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="1.5" y="3.5" width="13" height="9" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M1.5 5.5l6.5 4 6.5-4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></span>
+      Email Log
+    </button>
+    <button class="nav-item" onclick="show('team')">
+      <span class="nav-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="6" cy="5" r="2.5" stroke="currentColor" stroke-width="1.3"/><path d="M1 13c0-2.76 2.24-5 5-5s5 2.24 5 5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="12" cy="5" r="2" stroke="currentColor" stroke-width="1.3"/><path d="M14 13c0-2.21-1.34-4-3-4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></span>
+      Team
+    </button>
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="status-row"><div class="status-dot" style="background:var(--green);"></div><span class="status-label">Zoom connected</span></div>
+    <div class="status-row"><div class="status-dot" style="background:var(--green);"></div><span class="status-label">O365 email active</span></div>
+  </div>
+</aside>
+
+<!-- Main -->
+<main class="main" id="mc"></main>
+</div>
+
+<script>
+const AVC=["#2F6FED","#2D9E6E","#D44C47","#C08B1A","#7C52C8","#0891B2","#BE4BDB"];
+const avc=n=>AVC[n.charCodeAt(0)%AVC.length];
+const ini=n=>n.split(" ").map(w=>w[0]).join("").toUpperCase().slice(0,2);
+const fmt=d=>new Date(d).toLocaleDateString("en-US",{month:"short",day:"numeric"});
+const T=new Date();
+const dOff=o=>{const x=new Date(T);x.setDate(x.getDate()+o);return x;};
+const av=(n,sz=24)=>`<div class="avatar" style="width:${sz}px;height:${sz}px;background:${avc(n)};font-size:${Math.round(sz*.38)}px;">${ini(n)}</div>`;
+const avatarStack=(attendees,sz=22)=>{
+  const show=attendees.slice(0,4);
+  const extra=attendees.length-4;
+  return`<div class="avatar-stack">${show.map((a,i)=>`<div style="margin-left:${i?-6:0}px;">${av(a,sz)}</div>`).join("")}${extra>0?`<div class="avatar-overflow" style="width:${sz}px;height:${sz}px;margin-left:-6px;font-size:9px;">+${extra}</div>`:""}</div>`;
+};
+
+const MEETINGS=[
+  {id:"m1",title:"Q2 Revenue Planning",date:dOff(-1),duration:90,attendees:["Eric Miller","Sarah Chen","Colin Mills"],items:4},
+  {id:"m2",title:"Patel Foundation — Asset Review",date:dOff(-3),duration:45,attendees:["Eric Miller","James Okafor"],items:3},
+  {id:"m3",title:"Four Seasons Charleston Ops",date:dOff(-5),duration:60,attendees:["Eric Miller","Priya Nair","Tom Walsh"],items:3},
+  {id:"m4",title:"JW Marriott F&B Strategy",date:dOff(-8),duration:75,attendees:["Eric Miller","Colin Mills","Maria Lopez","Sarah Chen"],items:4},
+];
+const ITEMS=[
+  {id:"i1",mid:"m1",title:"Finalize Latitude 28 pricing model and deliver to GM",assignee:"Eric Miller",status:"in_progress",priority:"high",due:dOff(2)},
+  {id:"i2",mid:"m1",title:"Submit revised IT budget proposal to Marriott corporate",assignee:"Sarah Chen",status:"open",priority:"medium",due:dOff(7)},
+  {id:"i3",mid:"m1",title:"Rebid kitchen cleaning contract — minimum 3 vendors",assignee:"Colin Mills",status:"open",priority:"high",due:dOff(4)},
+  {id:"i4",mid:"m1",title:"Prepare Q3 F&B performance summary for ownership",assignee:"Eric Miller",status:"open",priority:"low",due:dOff(14)},
+  {id:"i5",mid:"m2",title:"Draft Asset Management Agreement Section 4 threshold language",assignee:"Eric Miller",status:"in_progress",priority:"high",due:dOff(3)},
+  {id:"i6",mid:"m2",title:"Confirm NSU lease renewal terms with legal counsel",assignee:"James Okafor",status:"open",priority:"medium",due:dOff(10)},
+  {id:"i7",mid:"m2",title:"Schedule quarterly board presentation for May",assignee:"James Okafor",status:"open",priority:"low",due:dOff(20)},
+  {id:"i8",mid:"m3",title:"Submit Lutron RFQ to Smartcon and Trident",assignee:"Eric Miller",status:"complete",priority:"high",due:dOff(-2)},
+  {id:"i9",mid:"m3",title:"Coordinate model room Gantt with construction lead",assignee:"Priya Nair",status:"complete",priority:"medium",due:dOff(-1)},
+  {id:"i10",mid:"m3",title:"Review sailcloth tent proposal with ownership group",assignee:"Tom Walsh",status:"overdue",priority:"high",due:dOff(-3)},
+  {id:"i11",mid:"m4",title:"Finalize side letter redline — iManage #3997967",assignee:"Eric Miller",status:"complete",priority:"high",due:dOff(-5)},
+  {id:"i12",mid:"m4",title:"Update Reserve contribution schedule with finance",assignee:"Colin Mills",status:"complete",priority:"medium",due:dOff(-4)},
+  {id:"i13",mid:"m4",title:"Clearwater F&B comp set pricing refresh",assignee:"Maria Lopez",status:"complete",priority:"low",due:dOff(-3)},
+  {id:"i14",mid:"m4",title:"Send Q2 performance deck to ownership",assignee:"Sarah Chen",status:"complete",priority:"medium",due:dOff(-2)},
+];
+const EMAILS=[
+  {recipient:"eric@redpenguin.com",subject:"Action items from Q2 Revenue Planning",status:"sent",provider:"O365",ts:dOff(-1)},
+  {recipient:"s.chen@jwmarriott.com",subject:"Action items from Q2 Revenue Planning",status:"sent",provider:"O365",ts:dOff(-1)},
+  {recipient:"t.walsh@fourseasons.com",subject:"Reminder: Overdue action item",status:"failed",provider:"O365",ts:dOff(-1),error:"550 Mailbox not found"},
+  {recipient:"j.okafor@patelfoundation.org",subject:"Action items from Patel Foundation Review",status:"sent",provider:"O365",ts:dOff(-3)},
+  {recipient:"c.mills@jwmarriott.com",subject:"Action items from JW Marriott F&B Strategy",status:"sent",provider:"O365",ts:dOff(-8)},
+];
+const TEAM=[
+  {name:"Eric Miller",email:"eric@redpenguin.com",role:"Admin",open:3,done:3,overdue:0},
+  {name:"Sarah Chen",email:"s.chen@jwmarriott.com",role:"Member",open:1,done:2,overdue:0},
+  {name:"Colin Mills",email:"c.mills@jwmarriott.com",role:"Member",open:1,done:2,overdue:0},
+  {name:"James Okafor",email:"j.okafor@patelfoundation.org",role:"Member",open:2,done:0,overdue:0},
+  {name:"Priya Nair",email:"p.nair@fourseasons.com",role:"Member",open:0,done:1,overdue:0},
+  {name:"Tom Walsh",email:"t.walsh@fourseasons.com",role:"Member",open:0,done:0,overdue:1},
+  {name:"Maria Lopez",email:"m.lopez@jwmarriott.com",role:"Member",open:0,done:1,overdue:0},
+];
+
+const badge=s=>{const m={open:"b-open Open",in_progress:"b-progress In Progress",complete:"b-done Complete",overdue:"b-overdue Overdue"};const p=(m[s]||"b-open Open").split(" ");return`<span class="badge ${p[0]}"><span class="badge-dot"></span>${p.slice(1).join(" ")}</span>`;};
+const prio=p=>{const m={high:"p-high HIGH",medium:"p-med MED",low:"p-low LOW"};const[c,l]=(m[p]||"p-low LOW").split(" ");return`<span class="prio ${c}">${l}</span>`;};
+const mtg=id=>MEETINGS.find(m=>m.id===id);
+
+function show(s){
+  document.querySelectorAll(".nav-item").forEach(b=>b.classList.toggle("active",b.getAttribute("onclick").includes("'"+s+"'")));
+  const mc=document.getElementById("mc");
+  if(s==="dashboard")mc.innerHTML=dashHtml();
+  else if(s==="items")mc.innerHTML=itemsHtml("all");
+  else if(s==="meetings")mc.innerHTML=meetingsHtml();
+  else if(s==="email")mc.innerHTML=emailHtml();
+  else if(s==="team")mc.innerHTML=teamHtml();
+}
+
+function dashHtml(){
+  const open=ITEMS.filter(i=>i.status==="open").length;
+  const inp=ITEMS.filter(i=>i.status==="in_progress").length;
+  const od=ITEMS.filter(i=>i.status==="overdue").length;
+  const done=ITEMS.filter(i=>i.status==="complete").length;
+  const recent=ITEMS.filter(i=>i.status!=="complete").slice(0,5);
+  return`<div class="screen">
+<div class="page-header"><div class="page-title">Good morning, Eric</div><div class="page-sub">Here's what needs attention today</div></div>
+<div class="stat-row">
+  <div class="stat"><div class="stat-label">Open</div><div class="stat-val">${open}</div><div class="stat-sub">action items</div></div>
+  <div class="stat"><div class="stat-label">In Progress</div><div class="stat-val" style="color:var(--amber)">${inp}</div><div class="stat-sub">being worked on</div></div>
+  <div class="stat${od?" stat-danger":""}"><div class="stat-label">Overdue</div><div class="stat-val" style="color:var(--red)">${od}</div><div class="stat-sub">need immediate action</div></div>
+  <div class="stat"><div class="stat-label">Completed</div><div class="stat-val" style="color:var(--green)">${done}</div><div class="stat-sub">this month</div></div>
+</div>
+<div class="section-head"><div class="section-title">Open action items</div><button class="section-action" onclick="show('items')">View all →</button></div>
+<div class="card">
+  <div class="table-head g-items"><div>Task</div><div>Assignee</div><div>Status</div><div>Priority</div><div>Due</div></div>
+  ${recent.map(i=>`<div class="table-row g-items">
+    <div><div class="cell-main">${i.title}</div><div class="cell-sub">${mtg(i.mid)?.title||""}</div></div>
+    <div class="assignee-cell">${av(i.assignee)}<span class="cell" style="font-size:13px;">${i.assignee.split(" ")[0]}</span></div>
+    <div>${badge(i.status)}</div><div>${prio(i.priority)}</div>
+    <div class="cell-mono">${fmt(i.due)}</div>
+  </div>`).join("")}
+</div>
+<div class="section-head"><div class="section-title">Recent meetings</div><button class="section-action" onclick="show('meetings')">View all →</button></div>
+<div class="card">
+  <div class="table-head g-meetings"><div>Meeting</div><div>Date</div><div>Duration</div><div>Attendees</div><div>Items</div></div>
+  ${MEETINGS.slice(0,3).map(m=>`<div class="table-row g-meetings">
+    <div class="cell-main">${m.title}</div>
+    <div class="cell-mono">${fmt(m.date)}</div>
+    <div class="cell">${m.duration}m</div>
+    <div>${avatarStack(m.attendees)}</div>
+    <div class="cell-mono">${m.items}</div>
+  </div>`).join("")}
+</div></div>`;
+}
+
+function itemsHtml(filter){
+  const filtered=filter==="all"?ITEMS:ITEMS.filter(i=>i.status===filter);
+  const counts={all:ITEMS.length,open:0,in_progress:0,overdue:0,complete:0};
+  ITEMS.forEach(i=>counts[i.status]=(counts[i.status]||0)+1);
+  return`<div class="screen">
+<div class="page-header"><div class="page-title">Action Items</div><div class="page-sub">${ITEMS.length} items across ${MEETINGS.length} meetings</div></div>
+<div class="filter-row">
+  ${[["all","All"],["open","Open"],["in_progress","In Progress"],["overdue","Overdue"],["complete","Complete"]].map(([f,l])=>`<button class="filter-btn${filter===f?" active":""}" onclick="show_items('${f}')">${l}<span class="filter-count">${counts[f]||0}</span></button>`).join("")}
+</div>
+<div class="card">
+  <div class="table-head g-items"><div>Task</div><div>Assignee</div><div>Status</div><div>Priority</div><div>Due</div></div>
+  ${filtered.length===0?`<div class="empty">No items</div>`:filtered.map(i=>`<div class="table-row g-items">
+    <div><div class="cell-main">${i.title}</div><div class="cell-sub">${mtg(i.mid)?.title||""}</div></div>
+    <div class="assignee-cell">${av(i.assignee)}<span class="cell" style="font-size:13px;">${i.assignee}</span></div>
+    <div>${badge(i.status)}</div><div>${prio(i.priority)}</div>
+    <div class="cell-mono" style="${i.status==="overdue"?"color:var(--red)":""}">${fmt(i.due)}</div>
+  </div>`).join("")}
+</div></div>`;
+}
+function show_items(f){document.getElementById("mc").innerHTML=itemsHtml(f);}
+
+function meetingsHtml(){
+  return`<div class="screen">
+<div class="page-header"><div class="page-title">Meetings</div><div class="page-sub">${MEETINGS.length} meetings processed · ${ITEMS.length} action items extracted</div></div>
+<div class="card">
+  <div class="table-head g-meetings"><div>Meeting</div><div>Date</div><div>Duration</div><div>Attendees</div><div>Items</div></div>
+  ${MEETINGS.map(m=>`<div class="table-row g-meetings">
+    <div><div class="cell-main">${m.title}</div><div class="cell-sub">${m.attendees.join(", ")}</div></div>
+    <div class="cell-mono">${fmt(m.date)}</div>
+    <div class="cell">${m.duration}m</div>
+    <div>${avatarStack(m.attendees)}</div>
+    <div><span class="cell-mono" style="color:var(--accent);">${m.items} extracted</span></div>
+  </div>`).join("")}
+</div></div>`;
+}
+
+function emailHtml(){
+  const sent=EMAILS.filter(e=>e.status==="sent").length;
+  const failed=EMAILS.filter(e=>e.status==="failed").length;
+  return`<div class="screen">
+<div class="page-header"><div class="page-title">Email Log</div><div class="page-sub">Notification delivery history</div></div>
+<div class="stat-row-3">
+  <div class="stat"><div class="stat-label">Sent</div><div class="stat-val" style="color:var(--green)">${sent}</div><div class="stat-sub">delivered successfully</div></div>
+  <div class="stat${failed?" stat-danger":""}"><div class="stat-label">Failed</div><div class="stat-val" style="color:var(--red)">${failed}</div><div class="stat-sub">delivery errors</div></div>
+  <div class="stat"><div class="stat-label">Provider</div><div class="stat-val" style="font-size:18px;">O365</div><div class="stat-sub">Microsoft Graph</div></div>
+</div>
+<div class="card">
+  <div class="table-head g-email"><div>Recipient</div><div>Subject</div><div>Status</div><div>Provider</div><div>Date</div></div>
+  ${EMAILS.map(e=>`<div class="table-row g-email">
+    <div class="cell-mono">${e.recipient}</div>
+    <div><div class="cell-main" style="font-weight:400;">${e.subject}</div>${e.error?`<div class="cell-sub" style="color:var(--red);">${e.error}</div>`:""}</div>
+    <div><span class="badge ${e.status==="sent"?"b-done":"b-overdue"}"><span class="badge-dot"></span>${e.status}</span></div>
+    <div class="cell-mono">${e.provider}</div>
+    <div class="cell-mono">${fmt(e.ts)}</div>
+  </div>`).join("")}
+</div></div>`;
+}
+
+function teamHtml(){
+  const od=TEAM.filter(m=>m.overdue>0).length;
+  const active=TEAM.filter(m=>m.open>0||m.overdue>0).length;
+  return`<div class="screen">
+<div class="page-header"><div class="page-title">Team</div><div class="page-sub">${TEAM.length} members · auto-detected from Zoom participants</div></div>
+<div class="stat-row-3">
+  <div class="stat"><div class="stat-label">Members</div><div class="stat-val">${TEAM.length}</div><div class="stat-sub">auto-detected from Zoom</div></div>
+  <div class="stat"><div class="stat-label">Active</div><div class="stat-val" style="color:var(--accent)">${active}</div><div class="stat-sub">have open items</div></div>
+  <div class="stat${od?" stat-danger":""}"><div class="stat-label">Overdue</div><div class="stat-val" style="color:var(--red)">${od}</div><div class="stat-sub">members with overdue items</div></div>
+</div>
+<div class="section-head"><div class="section-title">Members</div><span class="zoom-pill"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" style="opacity:.7"><rect x="1" y="4" width="9" height="8" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M10 7l4-2v6l-4-2V7z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg> synced from Zoom</span></div>
+<div class="team-cards">
+  ${TEAM.map(m=>`<div class="team-card">
+    ${av(m.name,38)}
+    <div style="flex:1;min-width:0;">
+      <div class="member-name">${m.name}</div>
+      <div class="member-email">${m.email}</div>
+      <div class="member-stats">
+        <span style="color:${m.overdue?"var(--red)":"var(--text2)"};">${m.open+m.overdue}</span> open &nbsp;·&nbsp;
+        <span style="color:var(--text2);">${m.done}</span> done
+        ${m.overdue?`&nbsp;·&nbsp; <span style="color:var(--red);">${m.overdue} overdue</span>`:""}
+      </div>
+    </div>
+    ${m.role==="Admin"?`<span class="badge b-done" style="align-self:flex-start;"><span class="badge-dot"></span>Admin</span>`:""}
+  </div>`).join("")}
+</div>
+<div class="card">
+  <div class="table-head g-team"><div>Member</div><div>Role</div><div>Open</div><div>Done</div><div>Overdue</div></div>
+  ${TEAM.map(m=>`<div class="table-row g-team">
+    <div class="assignee-cell">${av(m.name)}<div><div class="cell-main" style="font-size:13px;">${m.name}</div><div class="cell-sub">${m.email}</div></div></div>
+    <div class="cell">${m.role}</div>
+    <div class="cell-mono">${m.open}</div>
+    <div class="cell-mono" style="color:var(--green);">${m.done}</div>
+    <div class="cell-mono" style="${m.overdue?"color:var(--red);font-weight:500;":""}">${m.overdue||"—"}</div>
+  </div>`).join("")}
+</div></div>`;
+}
+
+show("dashboard");
+</script>
+</body>
+</html>
