@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MeetingTracker — Build Roadmap</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f8f7f5;padding:32px 20px 60px;color:#1a1a18;-webkit-font-smoothing:antialiased}
+.rm{max-width:720px;margin:0 auto}
+h1{font-size:20px;font-weight:600;letter-spacing:-.3px;margin-bottom:4px}
+.subtitle{font-size:13px;color:#787774;margin-bottom:24px}
+.summary-row{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+.scard{flex:1;min-width:100px;background:#fff;border-radius:10px;padding:10px 12px;border:0.5px solid #e9e9e7}
+.scard-num{font-size:22px;font-weight:600;color:#1a1a18;font-variant-numeric:tabular-nums}
+.scard-lbl{font-size:11px;color:#787774;margin-top:2px}
+.phase-block{margin-bottom:14px;border:0.5px solid #e9e9e7;border-radius:12px;overflow:hidden;background:#fff}
+.phase-head{display:flex;align-items:center;gap:10px;padding:12px 16px;cursor:pointer;background:#f7f7f5;user-select:none}
+.ph-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.ph-title{font-size:14px;font-weight:600;color:#1a1a18;flex:1}
+.ph-dates{font-size:11px;color:#acaba8;white-space:nowrap;margin-right:8px}
+.ph-badge{font-size:11px;font-weight:500;padding:2px 8px;border-radius:10px;white-space:nowrap}
+.ph-chev{transition:transform .2s;color:#acaba8}
+.phase-block.closed .ph-chev{transform:rotate(-90deg)}
+.phase-body{border-top:0.5px solid #e9e9e7}
+.phase-block.closed .phase-body{display:none}
+.pbar-wrap{height:2px;background:#e9e9e7;margin:0 16px;overflow:hidden}
+.pbar-fill{height:100%;border-radius:2px;transition:width .35s ease}
+.pstat{font-size:11px;color:#acaba8;padding:8px 16px 4px;display:flex;justify-content:space-between}
+.slabel{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:#acaba8;padding:10px 16px 4px}
+.trow{display:grid;grid-template-columns:40px 1fr auto;align-items:start;padding:8px 16px;gap:8px;border-top:0.5px solid #e9e9e7;transition:background .1s;cursor:default}
+.trow:hover{background:#f7f7f5}
+.cb{width:16px;height:16px;border-radius:4px;border:0.5px solid #d4d4d1;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:#fff;transition:all .15s;margin-top:2px}
+.cb.on{background:#6940c7;border-color:#6940c7}
+.cb.on svg{display:block}
+.cb svg{display:none;width:10px;height:10px}
+.tlabel{font-size:13px;color:#1a1a18;line-height:1.4}
+.tlabel.done{text-decoration:line-through;color:#acaba8}
+.tsub{font-size:11px;color:#787774;margin-top:2px;line-height:1.4}
+.ttag{font-size:10px;color:#acaba8;white-space:nowrap;padding-top:3px}
+.gate{display:flex;align-items:center;gap:10px;padding:11px 16px;border-top:0.5px solid #e9e9e7;background:#f7f7f5}
+.gate-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.gate-label{font-size:12px;font-weight:600}
+.gate-sub{font-size:11px;color:#787774;margin-left:auto;text-align:right}
+.pause{border:0.5px solid #e9e9e7;border-radius:12px;padding:13px 16px;margin-bottom:14px;background:#fffbeb}
+.pause-row{display:flex;align-items:center;gap:10px;margin-bottom:5px}
+.pause-title{font-size:13px;font-weight:600;color:#92400e}
+.pause-body{font-size:12px;color:#b45309;line-height:1.6;padding-left:28px}
+.rules{border:0.5px solid #e9e9e7;border-radius:12px;padding:14px 16px;background:#fff}
+.rules-title{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:#acaba8;margin-bottom:10px}
+.rule{display:flex;gap:9px;padding:4px 0;font-size:12px;color:#1a1a18;line-height:1.5}
+.rdot{width:4px;height:4px;border-radius:50%;background:#6940c7;margin-top:7px;flex-shrink:0}
+</style>
+</head>
+<body>
+<div class="rm">
+<h1>MeetingTracker — Build Roadmap</h1>
+<p class="subtitle">MVP → Beta 1.1 · Eric Miller · Red Penguin Consulting · Updated Apr 15, 2026</p>
+
+<div class="summary-row">
+  <div class="scard"><div class="scard-num" id="total-done">0</div><div class="scard-lbl">steps done</div></div>
+  <div class="scard"><div class="scard-num" id="total-left">0</div><div class="scard-lbl">steps remaining</div></div>
+  <div class="scard"><div class="scard-num" id="total-pct">0%</div><div class="scard-lbl">overall progress</div></div>
+  <div class="scard"><div class="scard-num" id="current-phase">P0</div><div class="scard-lbl">current phase</div></div>
+</div>
+
+<!-- PHASE 0 -->
+<div class="phase-block" id="ph-p0">
+  <div class="phase-head" onclick="togglePhase('p0')">
+    <div class="ph-dot" style="background:#2563eb"></div>
+    <span class="ph-title">Phase 0 — Foundation</span>
+    <span class="ph-dates">Apr 15 → Apr 29</span>
+    <span class="ph-badge" style="background:#eff6ff;color:#1d4ed8;border:0.5px solid #bfdbfe" id="b-p0">0/0</span>
+    <svg class="ph-chev" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 5l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+  </div>
+  <div class="phase-body">
+    <div class="pstat"><span id="pct-p0">0%</span><span id="stat-p0">0 of 0 done</span></div>
+    <div class="pbar-wrap"><div class="pbar-fill" id="bar-p0" style="width:0%;background:#2563eb"></div></div>
+    <div class="slabel">Already shipped</div>
+    <div class="trow" data-ph="p0"><div class="cb on" onclick="chk(this)"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg></div><div><div class="tlabel done">Railway backend deployed + live</div><div class="tsub">meetingtracker-backend-production.up.railway.app</div></div><span class="ttag">Done</span></div>
+    <div class="trow" data-ph="p0"><div class="cb on" onclick="chk(this)"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg></div><div><div class="tlabel done">Vercel frontend deployed + live</div><div class="tsub">meetingtracker-frontend.vercel.app</div></div><span class="ttag">Done</span></div>
+    <div class="trow" data-ph="p0"><div class="cb on" onclick="chk(this)"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg></div><div><div class="tlabel done">Supabase — all core tables created</div><div class="tsub">meetings, action_items, workspaces, users, email_configs, email_logs, tokens, subscriptions, meeting_minutes</div></div><span class="ttag">Done</span></div>
+    <div class="trow" data-ph="p0"><div class="cb on" onclick="chk(this)"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg></div><div><div class="tlabel done">Zoom webhook fires on meeting end</div><div class="tsub">Webhook Only App connected, secret configured, account ID stored</div></div><span class="ttag">Done</span></div>
+    <div class="trow" data-ph="p0"><div class="cb on" onclick="chk(this)"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg></div><div><div class="tlabel done">Claude API extraction pipeline</div><div class="tsub">claude-sonnet-4-20250514 — extracts tasks, decisions, facts from meeting summary</div></div><span class="ttag">Done</span></div>
+    <div class="trow" data-ph="p0"><div class="cb on" onclick="chk(this)"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg></div><div><div class="tlabel done">O365 email sending live</div><div class="tsub">Azure AD, Graph API, sending from eric@rpbuild.com</div></div><span class="ttag">Done</span></div>
+    <div class="trow" data-ph="p0"><div class="cb on" onclick="chk(this)"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg></div><div><div class="tlabel done">Meeting Minutes backend — routes/minutes.js</div><div class="tsub">GET / PATCH / POST send built. Webhook auto-creates draft on meeting end.</div></div><span class="ttag">Done</span></div>
+    <div class="trow" data-ph="p0"><div class="cb on" onclick="chk(this)"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg></div><div><div class="tlabel done">Wireframe v4 — all 6 screens, full logic defined</div><div class="tsub">Dashboard, action items, meetings, minutes, email log, team</div></div><span class="ttag">Done</span></div>
+    <div class="trow" data-ph="p0"><div class="cb on" onclick="chk(this)"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg></div><div><div class="tlabel done">Onboarding flow — 3 steps + Betty modal</div><div class="tsub">Access code, meeting app connect, OAuth — designed, built, and wired</div></div><span class="ttag">Done</span></div>
+    <div class="slabel">Remaining</div>
+    <div class="trow" data-ph="p0"><div class="cb" onclick="chk(this)"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg></div><div><div class="tlabel">Enable RLS on all Supabase tables</div><div class="tsub">Currently disabled. Must be on before any external user touches data.</div></div><span class="ttag">0.5 day</span></div>
+    <div class="trow" data-ph="p0"><div class="cb" onclick="chk(this)"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg></div><div><div class="tlabel">Supabase Auth — magic link sign-in</div><div class="tsub">Email → magic link → session token → stored in auth.users</div></div><span class="ttag">1 day</span></div>
+    <div class="trow" data-ph="p0"><div class="cb" onclick="chk(this)"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg></div><div><div class="tlabel">Workspace session — user tied to workspace_id</div><div class="tsub">Auth user → workspace_id → all queries scoped to that workspace</div></div><span class="ttag">0.5 day</span></div>
+    <div class="trow" data-ph="p0"><div class="cb" onclick="chk(this)"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg></div><div><div class="tlabel">Speaker registry — name → email per workspace</div><div class="tsub">Table: speakers (id, workspace_id, name, email, role)</div></div><span class="ttag">1 day</span></div>
+    <div class="trow" data-ph="p0"><div class="cb" onclick="chk(this)"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg></div><div><div class="tlabel">Wire minutes list to real Supabase drafts</div><div class="tsub">Left panel loads real pending meetings. Click → loads real content.</div></div><span class="ttag">1 day</span></div>
+    <div class="trow" data-ph="p0"><div class="cb" onclick="chk(this)"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg></div><div><div class="tlabel">Wire minutes detail to real API</div><div class="tsub">GET /minutes/:id populates content. PATCH /minutes/:id saves edits.</div></div><span class="ttag">2 days</span></div>
+    <div class="trow" data-ph="p0"><div class="cb" onclick="chk(this)"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg></div><div><div class="tlabel">Approve & send — triggers real O365 email</div><div class="tsub">POST /minutes/:id/send → O365 Graph → marks sent → toast confirmation</div></div><span class="ttag">0.5 day</span></div>
+    <div class="gate"><div class="gate-dot" style="background:#16a34a"></div><span class="gate-label" style="color:#15803d">Gate 0 — Core loop closed</span><span class="gate-sub">Meeting ends → Betty extracts → you review → email sent</span></div>
+  </div>
+</div>
+
+<!-- PHASE 1 -->
+<div class="phase-block" id="ph-p1">
+  <div class="phase-head" onclick="togglePhase('p1')">
+    <div class="ph-dot" style="background:#7c3aed"></div>
+    <span class="ph-title">Phase 1 — MVP</span>
+    <span class="ph-dates">Apr 30 → May 13</span>
+    <span class="ph-badge" style="background:#f5f3ff;color:#6d28d9;border:0.5px solid #ddd6fe" id="b-p1">0/0</span>
+    <svg class="ph-chev" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 5l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+  </div>
+  <div class="phase-body">
+    <div class="pstat"><span id="pct-p1">0%</span><span id="stat-p1">0 of 0 done</span></div>
+    <div class="pbar-wrap"><div class="pbar-fill" id="bar-p1" style="width:0%;background:#7c3aed"></div></div>
+    <div class="slabel">Frontend — Next.js</div>
+    <div class="trow" data-ph="p1"><div class="cb" onclick="chk(this)"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg></div><div><div class="tlabel">Next.js project setup on Vercel</div><div class="tsub">Init app, connect Vercel project, shared layout + nav component</div></div><span class="ttag">0.5 day</span></div>
+    <div class="trow" data-ph="p1"><div class="cb" onclick="chk(this)"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg></div><div><div class="tlabel">Tailwind CSS — design tokens from wireframe</div><div class="tsub">Map wireframe CSS vars to Tailwind config</div></div><span class="ttag">0.5 day</span></div>
+    <div class="trow" data-ph="p1"><div class="cb" onclick="chk(this)"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg></div><div><div class="tlabel">Auth pages — sign in + magic link confirm</div><div class="tsub">Sign-in page with email input. Confirm page handles token from email link.</div></div><span class="ttag">1 day</span></div>
+    <div class="trow" data-ph="p1"><div class="cb" onclick="chk(this)"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg></div><div><div class="tlabel">Onboarding pages live — real validation</div><div class="tsub">Access code hits real table. Zoom OAuth. Google/Microsoft OAuth connected.</div></div><span class="ttag">1.5 days</span></div>
+    <div class="trow" data-ph="p1"><div class="cb" onclick="chk(this)"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg></div><div><div class="tlabel">Dashboard — real Supabase data</div><div class="tsub">Stat cards, open tasks, recent activity — all live queries</div></div><span class="ttag">1.5 days</span></div>
+    <div class="trow" data-ph="p1"><div class="cb" onclick="chk(this)"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg></div><div><div class="tlabel">Action items — real tasks, check off persists</div><div class="tsub">Load from Supabase. Toggle complete → PATCH. Filters on real data.</div></div><span class="ttag">1 day</span></div>
+    <div class="trow" data-ph="p1"><div class="cb" onclick="chk(this)"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg></div><div><div class="tlabel">Meetings page — real list, click opens minutes</div><div class="tsub">Load from Supabase. Grouped by project.</div></div><span class="ttag">0.5 day</span></div>
+    <div class="trow" data-ph="p1"><div class="cb" onclick="chk(this)"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg></div><div><div class="tlabel">Email log — real sent history</div><div class="tsub">Load from email_logs. Subject, recipients, opens, status.</div></div><span class="ttag">0.5 day</span></div>
+    <div class="trow" data-ph="p1"><div class="cb" onclick="chk(this)"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg></div><div><div class="tlabel">Team page — speaker registry UI</div><div class="tsub">Add, edit, remove speakers per project.</div></div><span class="ttag">1 day</span></div>
+    <div class="slabel">Betty intelligence</div>
+    <div class="trow" data-ph="p1"><div class="cb" onclick="chk(this)"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg></div><div><div class="tlabel">Project auto-assignment logic</div><div class="tsub">Attendees → speaker registry → suggest project → user confirms</div></div><span class="ttag">1.5 days</span></div>
+    <div class="trow" data-ph="p1"><div class="cb" onclick="chk(this)"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg></div><div><div class="tlabel">Nudge engine — cron on Railway</div><div class="tsub">48hr / 72hr / 5-day nudge emails. Weekdays only.</div></div><span class="ttag">2 days</span></div>
+    <div class="trow" data-ph="p1"><div class="cb" onclick="chk(this)"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg></div><div><div class="tlabel">Betty bubble — real alerts from Supabase</div><div class="tsub">Replace mock alerts with live pending reviews and nudge approvals</div></div><span class="ttag">1 day</span></div>
+    <div class="slabel">Validation</div>
+    <div class="trow" data-ph="p1"><div class="cb" onclick="chk(this)"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg></div><div><div class="tlabel">Run 5 real Red Penguin meetings through Betty</div><div class="tsub">Four Seasons, JW Marriott, Patel Foundation. All 5 must work cleanly end to end.</div></div><span class="ttag">2 weeks</span></div>
+    <div class="trow" data-ph="p1"><div class="cb" onclick="chk(this)"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg></div><div><div class="tlabel">Invite first 5 beta testers with RED PENGUIN code</div><div class="tsub">Only after validation above. Real users, real meetings.</div></div><span class="ttag">Day 28</span></div>
+    <div class="gate"><div class="gate-dot" style="background:#7c3aed"></div><span class="gate-label" style="color:#6d28d9">Gate 1 — MVP live</span><span class="gate-sub">Real auth + data + 5 meetings validated + beta testers in</span></div>
+  </div>
+</div>
+
+<div class="pause">
+  <div class="pause-row">
+    <div style="width:20px;height:20px;border-radius:50%;background:#fef9c3;border:0.5px solid #fde68a;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><rect x="2.5" y="2" width="2" height="6" rx="1" fill="#b45309"/><rect x="5.5" y="2" width="2" height="6" rx="1" fill="#b45309"/></svg></div>
+    <span class="pause-title">Pause — weeks 5–6 · Betty earns Phase 2</span>
+  </div>
+  <div class="pause-body">Do not advance until Betty's extraction is clean enough to send to a Four Seasons or JW Marriott contact without editing. When edit rate drops below 20%, proceed.</div>
+</div>
+
+<!-- PHASE 2 -->
+<div class="phase-block" id="ph-p2">
+  <div class="phase-head" onclick="togglePhase('p2')">
+    <div class="ph-dot" style="background:#b45309"></div>
+    <span class="ph-title">Phase 2 — Beta 1.0</span>
+    <span class="ph-dates">May 26 → Jun 13</span>
+    <span class="ph-badge" style="background:#fffbeb;color:#92400e;border:0.5px solid #fde68a" id="b-p2">0/0</span>
+    <svg class="ph-chev" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 5l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+  </div>
+  <div class="phase-body">
+    <div class="pstat"><span id="pct-p2">0%</span><span id="stat-p2">0 of 0 done</span></div>
+    <div class="pbar-wrap"><div class="pbar-fill" id="bar-p2" style="width:0%;background:#b45309"></div></div>
+    <div class="slabel">Scheduling</div>
+    <div class="trow" data-ph="p2"><div class="cb" onclick="chk(this)"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg></div><div><div class="tlabel">New meeting modal — dynamic by connected app</div><div class="tsub">Show Zoom / Meet / Teams based on what user connected</div></div><span class="ttag">1 day</span></div>
+    <div class="trow" data-ph="p2"><div class="cb" onclick="chk(this)"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg></div><div><div class="tlabel">Zoom scheduling via API</div><div class="tsub">Betty creates meeting, returns join link, stores in meetings table, sends invite</div></div><span class="ttag">2 days</span></div>
+    <div class="trow" data-ph="p2"><div class="cb" onclick="chk(this)"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg></div><div><div class="tlabel">Availability poll — send + collect responses</div><div class="tsub">Betty sends poll email. Responses in Supabase. UI shows count.</div></div><span class="ttag">2 days</span></div>
+    <div class="trow" data-ph="p2"><div class="cb" onclick="chk(this)"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg></div><div><div class="tlabel">Poll consensus → auto calendar invite</div><div class="tsub">All responses in → Betty picks winning slot → sends invite</div></div><span class="ttag">1.5 days</span></div>
+    <div class="trow" data-ph="p2"><div class="cb" onclick="chk(this)"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg></div><div><div class="tlabel">Google Meet capture — Calendar API webhook</div><div class="tsub">Calendar watch → meeting end → summary → Claude extraction</div></div><span class="ttag">3 days</span></div>
+    <div class="trow" data-ph="p2"><div class="cb" onclick="chk(this)"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg></div><div><div class="tlabel">Microsoft Teams capture — Graph API webhook</div><div class="tsub">callRecords webhook → meeting end → transcript → Claude extraction</div></div><span class="ttag">3 days</span></div>
+    <div class="slabel">Collaboration</div>
+    <div class="trow" data-ph="p2"><div class="cb" onclick="chk(this)"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg></div><div><div class="tlabel">Guest link — tokenized shareable minutes</div><div class="tsub">Unique URL per meeting. View + check off tasks. No login required.</div></div><span class="ttag">2 days</span></div>
+    <div class="trow" data-ph="p2"><div class="cb" onclick="chk(this)"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg></div><div><div class="tlabel">Manual notes — paste text → Betty extracts</div><div class="tsub">New meeting "paste notes" path → Claude pipeline → draft created</div></div><span class="ttag">1 day</span></div>
+    <div class="trow" data-ph="p2"><div class="cb" onclick="chk(this)"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg></div><div><div class="tlabel">Email open tracking</div><div class="tsub">Tracking pixel. Log opens to email_logs. Show in email log screen.</div></div><span class="ttag">1 day</span></div>
+    <div class="trow" data-ph="p2"><div class="cb" onclick="chk(this)"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg></div><div><div class="tlabel">Soft signup prompt on guest link</div><div class="tsub">After guest checks off a task, Betty asks: "Want your own MeetingTracker?"</div></div><span class="ttag">0.5 day</span></div>
+    <div class="gate"><div class="gate-dot" style="background:#b45309"></div><span class="gate-label" style="color:#92400e">Gate 2 — Beta 1.0</span><span class="gate-sub">Multi-platform capture, scheduling, guest links all live</span></div>
+  </div>
+</div>
+
+<!-- PHASE 3 -->
+<div class="phase-block" id="ph-p3">
+  <div class="phase-head" onclick="togglePhase('p3')">
+    <div class="ph-dot" style="background:#0e9f6e"></div>
+    <span class="ph-title">Phase 3 — Beta 1.1</span>
+    <span class="ph-dates">Jun 14 → Jun 28</span>
+    <span class="ph-badge" style="background:#f0fdf4;color:#065f46;border:0.5px solid #bbf7d0" id="b-p3">0/0</span>
+    <svg class="ph-chev" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 5l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+  </div>
+  <div class="phase-body">
+    <div class="pstat"><span id="pct-p3">0%</span><span id="stat-p3">0 of 0 done</span></div>
+    <div class="pbar-wrap"><div class="pbar-fill" id="bar-p3" style="width:0%;background:#0e9f6e"></div></div>
+    <div class="slabel">Monetization</div>
+    <div class="trow" data-ph="p3"><div class="cb" onclick="chk(this)"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg></div><div><div class="tlabel">Purchase meetingtracker.io domain</div><div class="tsub">Connect to Vercel. Update all sender references from eric@rpbuild.com.</div></div><span class="ttag">0.5 day</span></div>
+    <div class="trow" data-ph="p3"><div class="cb" onclick="chk(this)"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg></div><div><div class="tlabel">betty@meetingtracker.io sender email</div><div class="tsub">Configure SendGrid or Postmark. Minutes from betty@, not personal address.</div></div><span class="ttag">0.5 day</span></div>
+    <div class="trow" data-ph="p3"><div class="cb" onclick="chk(this)"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg></div><div><div class="tlabel">Access codes table — generate + revoke</div><div class="tsub">Replace hardcoded RED PENGUIN. Admin creates / expires codes.</div></div><span class="ttag">1 day</span></div>
+    <div class="trow" data-ph="p3"><div class="cb" onclick="chk(this)"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg></div><div><div class="tlabel">Stripe Checkout — Pro plan subscription</div><div class="tsub">Free: 5 meetings/mo. Pro: unlimited. Webhook → update subscriptions.</div></div><span class="ttag">2 days</span></div>
+    <div class="trow" data-ph="p3"><div class="cb" onclick="chk(this)"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg></div><div><div class="tlabel">Usage gate — enforce free tier limit</div><div class="tsub">Check meeting count vs plan. Prompt upgrade when limit hit.</div></div><span class="ttag">0.5 day</span></div>
+    <div class="slabel">Betty intelligence</div>
+    <div class="trow" data-ph="p3"><div class="cb" onclick="chk(this)"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg></div><div><div class="tlabel">Edit pattern tracking</div><div class="tsub">Log every user edit after extraction. Store diff. Feed back into prompt per project.</div></div><span class="ttag">2 days</span></div>
+    <div class="trow" data-ph="p3"><div class="cb" onclick="chk(this)"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg></div><div><div class="tlabel">Weekly digest — Monday summary from Betty</div><div class="tsub">Cron every Monday 8am. Open tasks, overdue, meetings this week. Betty's voice.</div></div><span class="ttag">1.5 days</span></div>
+    <div class="slabel">Polish</div>
+    <div class="trow" data-ph="p3"><div class="cb" onclick="chk(this)"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg></div><div><div class="tlabel">Mobile responsive — minutes + action items</div><div class="tsub">Both screens usable on iPhone. Responsive web, not native app.</div></div><span class="ttag">2 days</span></div>
+    <div class="trow" data-ph="p3"><div class="cb" onclick="chk(this)"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg></div><div><div class="tlabel">Empty states — Betty speaks in every blank screen</div><div class="tsub">No meetings, no tasks, no team. Betty explains what will appear and what to do.</div></div><span class="ttag">1 day</span></div>
+    <div class="trow" data-ph="p3"><div class="cb" onclick="chk(this)"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg></div><div><div class="tlabel">Error states — failed sends, webhook failures</div><div class="tsub">Betty flags send failures with retry. Webhook failure alert in dashboard.</div></div><span class="ttag">1 day</span></div>
+    <div class="gate"><div class="gate-dot" style="background:#0e9f6e"></div><span class="gate-label" style="color:#065f46">Gate 3 — Beta 1.1 · First paying users</span><span class="gate-sub">Stripe live · domain live · Betty learning · first revenue</span></div>
+  </div>
+</div>
+
+<div class="rules">
+  <div class="rules-title">The rules</div>
+  <div class="rule"><div class="rdot"></div><span>Don't advance past a gate until the gate condition is fully met</span></div>
+  <div class="rule"><div class="rdot"></div><span>Consulting work wins if there's a conflict — Four Seasons and JW Marriott come first</span></div>
+  <div class="rule"><div class="rdot"></div><span>The pause after Gate 1 is non-negotiable — Betty earns Phase 2 on real meetings</span></div>
+  <div class="rule"><div class="rdot"></div><span>Calendar APIs take longer than estimated — add 3 days to Google or Teams work</span></div>
+  <div class="rule"><div class="rdot"></div><span>Scope creep goes in a Beta 1.2 parking lot — keep the current phase clean</span></div>
+  <div class="rule"><div class="rdot"></div><span>Come back to this file to check off steps — it's your source of truth</span></div>
+</div>
+
+</div>
+<script>
+function chk(cb){
+  cb.classList.toggle('on');
+  var row=cb.closest('.trow');
+  var label=row&&row.querySelector('.tlabel');
+  if(label)label.classList.toggle('done');
+  var ph=row&&row.getAttribute('data-ph');
+  if(ph)updatePhase(ph);
+  updateSummary();
+}
+function updatePhase(ph){
+  var all=document.querySelectorAll('[data-ph="'+ph+'"]');
+  var done=document.querySelectorAll('[data-ph="'+ph+'"] .cb.on').length;
+  var total=all.length;
+  var pct=total?Math.round(done/total*100):0;
+  var b=document.getElementById('b-'+ph);
+  var bar=document.getElementById('bar-'+ph);
+  var pctEl=document.getElementById('pct-'+ph);
+  var statEl=document.getElementById('stat-'+ph);
+  if(b)b.textContent=done+'/'+total;
+  if(bar)bar.style.width=pct+'%';
+  if(pctEl)pctEl.textContent=pct+'%';
+  if(statEl)statEl.textContent=done+' of '+total+' done';
+}
+function updateSummary(){
+  var allCbs=document.querySelectorAll('.trow .cb');
+  var doneCbs=document.querySelectorAll('.trow .cb.on');
+  var total=allCbs.length,done=doneCbs.length;
+  var pct=total?Math.round(done/total*100):0;
+  document.getElementById('total-done').textContent=done;
+  document.getElementById('total-left').textContent=total-done;
+  document.getElementById('total-pct').textContent=pct+'%';
+  var phases=['p0','p1','p2','p3'],labels={p0:'P0',p1:'P1',p2:'P2',p3:'P3'};
+  var cp=document.getElementById('current-phase');
+  for(var i=0;i<phases.length;i++){
+    var ph=phases[i];
+    var phDone=document.querySelectorAll('[data-ph="'+ph+'"] .cb.on').length;
+    var phTotal=document.querySelectorAll('[data-ph="'+ph+'"]').length;
+    if(phTotal>0&&phDone<phTotal){if(cp)cp.textContent=labels[ph];return;}
+  }
+  if(cp)cp.textContent='Done';
+}
+function togglePhase(ph){
+  var block=document.getElementById('ph-'+ph);
+  if(block)block.classList.toggle('closed');
+}
+['p0','p1','p2','p3'].forEach(function(ph){updatePhase(ph);});
+updateSummary();
+</script>
+</body>
+</html>
