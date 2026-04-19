@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2575.7">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="en"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1">&lt;meta charset="UTF-8"&gt;</p>
+<p class="p1">&lt;title&gt;Signing you in…&lt;/title&gt;</p>
+<p class="p1">&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>body { font-family: -apple-system, sans-serif; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; background: #f7f7f5; color: #1a1a1a; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.box { text-align: center; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.spinner { width: 28px; height: 28px; border: 2px solid #e8e7e3; border-top-color: #2f6fed; border-radius: 50%; animation: spin 0.7s linear infinite; margin: 0 auto 16px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>@keyframes spin { to { transform: rotate(360deg); } }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>p { font-size: 14px; color: #6b6b6b; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.error { color: #d44c47; font-size: 14px; display: none; }</p>
+<p class="p1">&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body&gt;</p>
+<p class="p1">&lt;div class="box"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="spinner"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;p id="msg"&gt;Signing you in…&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;p class="error" id="err"&gt;&lt;/p&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">&lt;script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>var hash = window.location.hash.substring(1);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>var params = {};</p>
+<p class="p1"><span class="Apple-converted-space">  </span>hash.split('&amp;').forEach(function(part) {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>var item = part.split('=');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>params[decodeURIComponent(item[0])] = decodeURIComponent(item[1] || '');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>var accessToken<span class="Apple-converted-space">  </span>= params['access_token'];</p>
+<p class="p1"><span class="Apple-converted-space">  </span>var refreshToken = params['refresh_token'];</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (accessToken) {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>localStorage.setItem('mt_access_token', accessToken);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>localStorage.setItem('mt_refresh_token', refreshToken);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>document.getElementById('msg').textContent = 'Signed in. Redirecting…';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>setTimeout(function() {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>window.location.href = '/index.html';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}, 800);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>document.querySelector('.spinner').style.display = 'none';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>document.getElementById('msg').style.display = 'none';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>var errEl = document.getElementById('err');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>errEl.style.display = 'block';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>errEl.textContent = 'Sign-in failed. The link may have expired. Please try again.';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>setTimeout(function() {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>window.location.href = '/login.html';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}, 3000);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1">&lt;/script&gt;</p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>
