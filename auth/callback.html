@@ -17,6 +17,8 @@ p{font-size:14px;color:#6b6b6b}
   <p id="msg">Signing you in...</p>
 </div>
 <script>
+var BACKEND = 'https://meetingtracker-backend-production.up.railway.app';
+
 function getParams(str) {
   var params = {};
   str.replace(/^\?|^#/,'').split('&').forEach(function(part) {
@@ -37,8 +39,36 @@ var errorDesc    = params['error_description'] || params['error'];
 if(accessToken) {
   localStorage.setItem('mt_access_token', accessToken);
   localStorage.setItem('mt_refresh_token', refreshToken || '');
-  document.getElementById('msg').textContent = 'Signed in. Redirecting...';
-  setTimeout(function(){ window.location.href = '/index.html'; }, 800);
+  document.getElementById('msg').textContent = 'Setting up your workspace...';
+
+  // Call session endpoint to get/create workspace
+  fetch(BACKEND + '/api/auth/session', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + accessToken
+    },
+    body: JSON.stringify({
+      email: params['email'] || ''
+    })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    if(data.workspace) {
+      localStorage.setItem('mt_workspace_id', data.workspace.id);
+      localStorage.setItem('mt_workspace_name', data.workspace.name);
+      localStorage.setItem('mt_user_email', data.user.email);
+      localStorage.setItem('mt_user_name', data.user.name);
+    }
+    document.getElementById('msg').textContent = 'Signed in. Redirecting...';
+    setTimeout(function(){ window.location.href = '/index.html'; }, 600);
+  })
+  .catch(function() {
+    // Session call failed but we still have the token — redirect anyway
+    document.getElementById('msg').textContent = 'Signed in. Redirecting...';
+    setTimeout(function(){ window.location.href = '/index.html'; }, 600);
+  });
+
 } else if(errorDesc) {
   document.getElementById('msg').textContent = 'Error: ' + decodeURIComponent(errorDesc).replace(/\+/g,' ');
 } else {
