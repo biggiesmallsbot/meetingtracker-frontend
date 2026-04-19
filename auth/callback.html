@@ -28,6 +28,15 @@ function getParams(str) {
   return params;
 }
 
+function decodeJWT(token) {
+  try {
+    var base64 = token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/');
+    var pad = base64.length % 4;
+    if(pad) base64 += new Array(5-pad).join('=');
+    return JSON.parse(atob(base64));
+  } catch(e) { return {}; }
+}
+
 var hashParams  = getParams(window.location.hash);
 var queryParams = getParams(window.location.search);
 var params = Object.assign({}, queryParams, hashParams);
@@ -39,18 +48,20 @@ var errorDesc    = params['error_description'] || params['error'];
 if(accessToken) {
   localStorage.setItem('mt_access_token', accessToken);
   localStorage.setItem('mt_refresh_token', refreshToken || '');
+
+  // Decode JWT to get email
+  var payload = decodeJWT(accessToken);
+  var email = payload.email || '';
+
   document.getElementById('msg').textContent = 'Setting up your workspace...';
 
-  // Call session endpoint to get/create workspace
   fetch(BACKEND + '/api/auth/session', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ' + accessToken
     },
-    body: JSON.stringify({
-      email: params['email'] || ''
-    })
+    body: JSON.stringify({ email: email })
   })
   .then(function(r) { return r.json(); })
   .then(function(data) {
@@ -64,7 +75,6 @@ if(accessToken) {
     setTimeout(function(){ window.location.href = '/index.html'; }, 600);
   })
   .catch(function() {
-    // Session call failed but we still have the token — redirect anyway
     document.getElementById('msg').textContent = 'Signed in. Redirecting...';
     setTimeout(function(){ window.location.href = '/index.html'; }, 600);
   });
