@@ -1,368 +1,998 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>MeetingTracker — Red Penguin</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MeetingTracker — Wireframe v4</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-:root{
-  --bg:#FFFFFF;--bg2:#F7F7F5;--bg3:#EFEEEB;--border:#E8E7E3;--border2:#D6D5CF;
-  --text:#1A1A1A;--text2:#6B6B6B;--text3:#ABABAB;
-  --accent:#2F6FED;--accent-bg:#EEF3FE;
-  --green:#2D9E6E;--green-bg:#EDFAF4;
-  --red:#D44C47;--red-bg:#FDECEA;
-  --amber:#C08B1A;--amber-bg:#FEF6E4;
-  --sans:'DM Sans',system-ui,sans-serif;--mono:'DM Mono',monospace;
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #f8f7f5;
+  --bg2: #f0eeeb;
+  --bg3: #e8e5e1;
+  --surface: #ffffff;
+  --border: #e5e2dd;
+  --border2: #d0cdc8;
+  --text: #1a1916;
+  --text2: #6b6760;
+  --text3: #9e9b96;
+  --accent: #1a56db;
+  --accent-light: #eef3ff;
+  --green: #0e9f6e;
+  --green-light: #f0fdf4;
+  --amber: #b45309;
+  --amber-light: #fffbeb;
+  --red: #c81e1e;
+  --red-light: #fef2f2;
+  --betty: #7c3aed;
+  --betty-light: #f5f3ff;
+  --betty-mid: #ddd6fe;
+  --sidebar-w: 220px;
+  --font: 'DM Sans', sans-serif;
+  --mono: 'DM Mono', monospace;
+  --r: 8px;
+  --rl: 12px;
 }
-html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14px;line-height:1.5;}
-::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
+body { font-family: var(--font); font-size: 14px; color: var(--text); background: var(--bg); display: flex; height: 100vh; overflow: hidden; -webkit-font-smoothing: antialiased; }
 
-.shell{display:flex;min-height:100vh;}
-.sidebar{width:240px;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;overflow-y:auto;}
-.sidebar-top{padding:16px 12px 12px;}
-.workspace{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:6px;cursor:pointer;transition:background .15s;}
-.workspace:hover{background:var(--bg3);}
-.ws-icon{width:28px;height:28px;border-radius:6px;background:#1A1A1A;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;font-family:var(--mono);flex-shrink:0;}
-.ws-name{font-size:13px;font-weight:600;}
-.ws-plan{font-size:11px;color:var(--text3);font-family:var(--mono);}
-.sidebar-section{padding:4px 12px;margin-top:8px;}
-.sidebar-label{font-size:11px;color:var(--text3);font-weight:500;letter-spacing:.06em;text-transform:uppercase;padding:6px 8px;font-family:var(--mono);}
-.nav-item{display:flex;align-items:center;gap:9px;padding:6px 8px;border-radius:5px;cursor:pointer;color:var(--text2);font-size:13.5px;transition:all .12s;user-select:none;border:none;background:none;width:100%;text-align:left;font-family:var(--sans);}
-.nav-item:hover{background:var(--bg3);color:var(--text);}
-.nav-item.active{background:var(--bg3);color:var(--text);font-weight:500;}
-.nav-icon{width:18px;opacity:.6;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
-.nav-item.active .nav-icon{opacity:.85;}
-.nav-badge{margin-left:auto;background:var(--red-bg);color:var(--red);font-size:10px;font-family:var(--mono);font-weight:500;padding:1px 7px;border-radius:20px;}
-.sidebar-footer{margin-top:auto;padding:12px;border-top:1px solid var(--border);}
-.status-row{display:flex;align-items:center;gap:7px;padding:3px 0;}
-.status-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
-.status-label{font-size:11px;color:var(--text3);font-family:var(--mono);}
+/* ── LEFT NAV ── */
+.leftnav { width: var(--sidebar-w); background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; flex-shrink: 0; }
+.nav-top { padding: 16px 14px 14px; border-bottom: 1px solid var(--border); }
+.logo-row { display: flex; align-items: center; gap: 9px; margin-bottom: 16px; }
+.logo-mark { width: 30px; height: 30px; background: var(--text); border-radius: 7px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.logo-mark svg { width: 16px; height: 16px; }
+.logo-text { font-size: 14px; font-weight: 600; letter-spacing: -0.3px; }
+.logo-beta { font-size: 10px; font-weight: 600; color: var(--betty); background: var(--betty-light); padding: 1px 5px; border-radius: 4px; border: 1px solid var(--betty-mid); }
+.nav-btn { width: 100%; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 7px 12px; background: var(--accent); color: #fff; border: none; border-radius: var(--r); font-family: var(--font); font-size: 12px; font-weight: 500; cursor: pointer; }
+.nav-items { flex: 1; padding: 8px 8px; overflow-y: auto; }
+.nav-item { display: flex; align-items: center; gap: 9px; padding: 7px 10px; border-radius: var(--r); cursor: pointer; transition: background 0.1s; margin-bottom: 1px; border: none; background: none; width: 100%; font-family: var(--font); font-size: 13px; color: var(--text2); text-align: left; }
+.nav-item:hover { background: var(--bg2); color: var(--text); }
+.nav-item.active { background: var(--accent-light); color: var(--accent); font-weight: 500; }
+.nav-item svg { width: 15px; height: 15px; flex-shrink: 0; }
+.nav-badge { margin-left: auto; font-size: 10px; font-weight: 600; padding: 1px 6px; border-radius: 10px; background: var(--accent); color: #fff; }
+.nav-divider { height: 1px; background: var(--border); margin: 6px 0; }
+.nav-section-label { font-size: 10px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 0.07em; padding: 6px 10px 4px; }
+.nav-bottom { border-top: 1px solid var(--border); padding: 10px 8px; }
+.profile-row { display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: var(--r); cursor: pointer; transition: background 0.1s; }
+.profile-row:hover { background: var(--bg2); }
+.p-av { width: 28px; height: 28px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; color: #fff; overflow: hidden; flex-shrink: 0; }
+.p-av img { width: 100%; height: 100%; object-fit: cover; }
+.p-name { font-size: 12px; font-weight: 500; }
+.p-sub { font-size: 11px; color: var(--text3); }
 
-.main{margin-left:240px;flex:1;padding:40px 48px;}
-.page-header{margin-bottom:32px;}
-.page-title{font-size:26px;font-weight:600;letter-spacing:-.02em;}
-.page-sub{font-size:14px;color:var(--text2);margin-top:4px;}
+/* ── MAIN ── */
+.main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+.topbar { display: flex; align-items: center; justify-content: space-between; padding: 0 24px; height: 50px; border-bottom: 1px solid var(--border); background: var(--surface); flex-shrink: 0; }
+.breadcrumb { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text3); }
+.breadcrumb span { color: var(--text); font-weight: 500; }
+.topbar-actions { display: flex; align-items: center; gap: 6px; }
+.btn { display: inline-flex; align-items: center; gap: 5px; padding: 6px 12px; border-radius: var(--r); font-family: var(--font); font-size: 12px; font-weight: 500; cursor: pointer; transition: all 0.12s; border: none; }
+.btn-ghost { background: none; color: var(--text2); border: 1px solid var(--border); }
+.btn-ghost:hover { background: var(--bg2); color: var(--text); }
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { background: #1447b8; }
+.btn-green { background: var(--green); color: #fff; }
+.btn-green:hover { background: #057a55; }
 
-.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:32px;}
-.stat-row-3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:32px;}
-.stat{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:16px 18px;}
-.stat-label{font-size:11px;color:var(--text3);font-weight:500;letter-spacing:.05em;text-transform:uppercase;font-family:var(--mono);}
-.stat-val{font-size:24px;font-weight:600;margin-top:6px;letter-spacing:-.02em;}
-.stat-sub{font-size:12px;color:var(--text3);margin-top:3px;}
-.stat-danger{background:var(--red-bg);border-color:#F5C4C4;}
-.stat-danger .stat-label{color:var(--red);}
-.stat-danger .stat-sub{color:var(--red);opacity:.6;}
+/* ── CONTENT AREA ── */
+.content { flex: 1; overflow: hidden; display: flex; }
+.screen { display: none; width: 100%; }
+.screen.active { display: flex; }
 
-.section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
-.section-title{font-size:13px;font-weight:600;color:var(--text);letter-spacing:-.01em;}
-.section-action{font-size:12px;color:var(--accent);cursor:pointer;background:none;border:none;font-family:var(--sans);padding:0;}
-.section-action:hover{text-decoration:underline;}
+/* ── DASHBOARD ── */
+#screen-dashboard { flex-direction: row; overflow: hidden; }
+.dash-main { flex: 1; overflow-y: auto; padding: 24px; }
+.dash-right { width: 260px; border-left: 1px solid var(--border); background: var(--surface); overflow-y: auto; padding: 16px; flex-shrink: 0; }
 
-.card{background:var(--bg);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:24px;}
-.table-head{display:grid;padding:9px 16px;background:var(--bg2);border-bottom:1px solid var(--border);font-size:11px;color:var(--text3);font-weight:500;letter-spacing:.05em;text-transform:uppercase;font-family:var(--mono);}
-.table-row{display:grid;padding:12px 16px;border-bottom:1px solid var(--border);align-items:center;transition:background .1s;cursor:pointer;}
-.table-row:last-child{border-bottom:none;}
-.table-row:hover{background:var(--bg2);}
+.welcome-row { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 20px; }
+.welcome-text h2 { font-size: 20px; font-weight: 600; letter-spacing: -0.3px; margin-bottom: 3px; }
+.welcome-text p { font-size: 13px; color: var(--text2); }
 
-.g-items{grid-template-columns:2fr 1fr 110px 80px 90px;}
-.g-meetings{grid-template-columns:2fr 110px 80px 90px 90px;}
-.g-email{grid-template-columns:1.6fr 2fr 80px 70px 90px;}
-.g-team{grid-template-columns:2fr 100px 70px 70px 80px;}
+.stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; }
+.stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--rl); padding: 14px 16px; }
+.stat-num { font-size: 24px; font-weight: 600; font-family: var(--mono); letter-spacing: -0.5px; margin-bottom: 3px; }
+.stat-label { font-size: 12px; color: var(--text2); }
+.stat-sub { font-size: 11px; color: var(--text3); margin-top: 2px; }
 
-.cell-main{font-size:13.5px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.cell-sub{font-size:12px;color:var(--text3);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.cell{font-size:13px;color:var(--text2);}
-.cell-mono{font-size:12px;color:var(--text2);font-family:var(--mono);}
+.section-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.section-title { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text3); display: flex; align-items: center; gap: 8px; }
+.pill { font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 10px; text-transform: none; letter-spacing: 0; }
+.pill-amber { background: var(--amber-light); color: var(--amber); border: 1px solid #fde68a; }
+.pill-green { background: var(--green-light); color: var(--green); border: 1px solid #bbf7d0; }
+.pill-blue { background: var(--accent-light); color: var(--accent); border: 1px solid #bfdbfe; }
+.pill-red { background: var(--red-light); color: var(--red); border: 1px solid #fecaca; }
 
-.badge{display:inline-flex;align-items:center;gap:5px;padding:2px 9px;border-radius:4px;font-size:11px;font-weight:500;font-family:var(--mono);white-space:nowrap;}
-.badge-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;}
-.b-open{background:var(--bg3);color:var(--text3);}.b-open .badge-dot{background:var(--text3);}
-.b-progress{background:var(--amber-bg);color:var(--amber);}.b-progress .badge-dot{background:var(--amber);}
-.b-done{background:var(--green-bg);color:var(--green);}.b-done .badge-dot{background:var(--green);}
-.b-overdue{background:var(--red-bg);color:var(--red);}.b-overdue .badge-dot{background:var(--red);}
+.task-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--rl); overflow: hidden; margin-bottom: 16px; }
+.task-card-row { display: grid; grid-template-columns: 22px 1fr 120px 90px 70px; gap: 10px; padding: 10px 14px; border-bottom: 1px solid var(--border); align-items: center; transition: background 0.1s; }
+.task-card-row:last-child { border-bottom: none; }
+.task-card-row:hover { background: var(--bg2); }
+.task-card-row.header { background: var(--bg2); }
+.task-card-row.header span { font-size: 10px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 0.05em; }
+.task-check { width: 16px; height: 16px; border: 1.5px solid var(--border2); border-radius: 3px; flex-shrink: 0; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.12s; }
+.task-check:hover { border-color: var(--accent); }
+.task-check.done { background: var(--green); border-color: var(--green); }
+.task-check.done svg { display: block; }
+.task-check svg { display: none; width: 10px; height: 10px; color: #fff; }
+.task-text { font-size: 13px; color: var(--text); }
+.task-text.done { text-decoration: line-through; color: var(--text3); }
+.mini-av { width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 600; color: #fff; flex-shrink: 0; }
+.assignee-cell { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text2); }
+.due-cell { font-size: 12px; color: var(--text2); }
+.due-cell.overdue { color: var(--red); font-weight: 500; }
+.due-cell.soon { color: var(--amber); font-weight: 500; }
+.pri { font-size: 11px; font-weight: 500; padding: 2px 6px; border-radius: 4px; }
+.pri-h { background: var(--red-light); color: var(--red); }
+.pri-m { background: var(--amber-light); color: var(--amber); }
+.pri-l { background: var(--green-light); color: var(--green); }
 
-.prio{font-size:11px;font-family:var(--mono);font-weight:500;}
-.p-high{color:var(--red);}.p-med{color:var(--amber);}.p-low{color:var(--text3);}
+.proj-tag { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 10px; }
 
-.avatar{border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:600;color:#fff;flex-shrink:0;font-family:var(--mono);}
-.assignee-cell{display:flex;align-items:center;gap:7px;}
-.avatar-stack{display:flex;align-items:center;}
-.avatar-overflow{border-radius:50%;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--text3);font-family:var(--mono);}
+.activity-list { display: flex; flex-direction: column; gap: 6px; }
+.activity-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 12px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); }
+.act-av { width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 600; color: #fff; flex-shrink: 0; margin-top: 1px; }
+.act-text { font-size: 13px; color: var(--text2); line-height: 1.4; flex: 1; }
+.act-text strong { color: var(--text); font-weight: 500; }
+.act-time { font-size: 11px; color: var(--text3); white-space: nowrap; }
 
-.filter-row{display:flex;align-items:center;gap:8px;margin-bottom:16px;}
-.filter-btn{font-size:12px;padding:5px 12px;border-radius:5px;border:1px solid var(--border);background:var(--bg);color:var(--text2);cursor:pointer;font-family:var(--sans);transition:all .12s;}
-.filter-btn:hover{background:var(--bg3);border-color:var(--border2);color:var(--text);}
-.filter-btn.active{background:var(--bg3);border-color:var(--border2);color:var(--text);font-weight:500;}
-.filter-count{color:var(--text3);font-family:var(--mono);font-size:11px;margin-left:3px;}
+.rp-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text3); margin-bottom: 10px; }
+.rp-section { margin-bottom: 20px; }
 
-.team-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px;}
-.team-card{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:16px 20px;display:flex;align-items:center;gap:14px;}
-.member-name{font-size:14px;font-weight:500;}
-.member-email{font-size:11px;color:var(--text3);font-family:var(--mono);margin-top:2px;}
-.member-stats{font-size:11px;font-family:var(--mono);color:var(--text3);margin-top:8px;}
+.proj-list { display: flex; flex-direction: column; gap: 6px; }
+.proj-item { padding: 10px 12px; background: var(--bg2); border-radius: var(--r); cursor: pointer; transition: background 0.1s; }
+.proj-item:hover { background: var(--bg3); }
+.proj-item-top { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
+.proj-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.proj-name { font-size: 13px; font-weight: 500; flex: 1; }
+.proj-item-stats { display: flex; align-items: center; gap: 8px; }
+.proj-stat { font-size: 11px; color: var(--text3); }
 
-.zoom-pill{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-family:var(--mono);background:var(--accent-bg);color:var(--accent);padding:3px 10px;border-radius:4px;}
+/* ── MINUTES SCREEN ── */
+#screen-minutes { flex-direction: row; overflow: hidden; }
+.minutes-list { width: 300px; border-right: 1px solid var(--border); background: var(--surface); overflow-y: auto; flex-shrink: 0; }
+.minutes-list-top { padding: 16px 14px 12px; border-bottom: 1px solid var(--border); }
+.minutes-list-title { font-size: 15px; font-weight: 600; letter-spacing: -0.2px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; }
+.search-box { display: flex; align-items: center; gap: 6px; background: var(--bg2); border: 1px solid var(--border); border-radius: var(--r); padding: 6px 10px; }
+.search-box input { border: none; outline: none; background: none; font-family: var(--font); font-size: 12px; color: var(--text); flex: 1; }
+.search-box input::placeholder { color: var(--text3); }
 
-.empty{display:flex;align-items:center;justify-content:center;padding:48px;color:var(--text3);font-size:13px;}
+.proj-group { margin-bottom: 4px; }
+.proj-group-header { display: flex; align-items: center; gap: 8px; padding: 8px 14px 4px; cursor: pointer; }
+.proj-group-header:hover { background: var(--bg2); }
+.proj-group-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.proj-group-name { font-size: 12px; font-weight: 600; color: var(--text2); flex: 1; }
+.proj-group-count { font-size: 10px; color: var(--text3); background: var(--bg3); padding: 1px 5px; border-radius: 8px; }
+.proj-group-chev { color: var(--text3); transition: transform 0.15s; }
+.proj-group.closed .proj-group-chev { transform: rotate(-90deg); }
+.proj-group.closed .proj-meeting-list { display: none; }
 
-.screen{animation:fadeIn .2s ease;}
-@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.proj-meeting-list { padding: 0 8px 6px; }
+.minute-item { padding: 8px 10px; border-radius: var(--r); cursor: pointer; transition: background 0.1s; margin-bottom: 2px; border-left: 2px solid transparent; }
+.minute-item:hover { background: var(--bg2); }
+.minute-item.active { background: var(--accent-light); border-left-color: var(--accent); }
+.minute-item-date { font-size: 11px; color: var(--text3); margin-bottom: 3px; display: flex; align-items: center; justify-content: space-between; }
+.minute-item-title { font-size: 13px; font-weight: 500; color: var(--text); line-height: 1.3; margin-bottom: 4px; }
+.minute-item.active .minute-item-title { color: var(--accent); }
+.minute-item-preview { font-size: 11px; color: var(--text3); line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.status-badge { font-size: 10px; font-weight: 600; padding: 1px 6px; border-radius: 4px; }
+.status-draft { background: var(--amber-light); color: var(--amber); }
+.status-sent { background: var(--green-light); color: var(--green); }
+.status-review { background: var(--betty-light); color: var(--betty); }
+
+/* ── MINUTE DETAIL ── */
+.minute-detail { flex: 1; overflow-y: auto; padding: 28px 32px 120px; }
+.detail-title { font-size: 22px; font-weight: 600; letter-spacing: -0.4px; margin-bottom: 10px; border: none; outline: none; background: none; font-family: var(--font); width: 100%; }
+.detail-meta { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 6px; }
+.meta-chip { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--text3); }
+.meta-chip svg { width: 12px; height: 12px; }
+.attendee-row { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-bottom: 20px; }
+.att-chip { display: flex; align-items: center; gap: 5px; background: var(--bg2); border: 1px solid var(--border); border-radius: 20px; padding: 3px 10px 3px 4px; font-size: 12px; color: var(--text2); }
+.att-chip-av { width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 600; color: #fff; }
+.add-att { background: none; border: 1px dashed var(--border2); border-radius: 20px; padding: 3px 10px; font-size: 12px; color: var(--text3); cursor: pointer; font-family: var(--font); }
+
+.detail-section { margin-bottom: 24px; }
+.detail-section-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.detail-section-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text3); display: flex; align-items: center; gap: 8px; }
+.divider { height: 1px; background: var(--border); margin: 20px 0; }
+
+/* TLDR */
+.tldr-card { background: var(--betty-light); border: 1px solid var(--betty-mid); border-radius: var(--rl); padding: 16px 18px; }
+.tldr-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.tldr-betty-av { width: 26px; height: 26px; border-radius: 50%; background: var(--betty); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; color: #fff; flex-shrink: 0; }
+.tldr-label { font-size: 12px; font-weight: 600; color: var(--betty); }
+.tldr-tone { font-size: 10px; color: var(--text3); margin-left: auto; background: var(--surface); border: 1px solid var(--betty-mid); padding: 2px 8px; border-radius: 4px; cursor: pointer; }
+.tldr-text { font-size: 13.5px; color: var(--text); line-height: 1.7; outline: none; border: none; background: none; font-family: var(--font); width: 100%; resize: none; }
+
+/* FACTS */
+.facts-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.fact-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 11px 13px; }
+.fact-card.flagged { border-color: #fde68a; background: #fffcf5; }
+.fact-value { font-size: 18px; font-weight: 600; font-family: var(--mono); letter-spacing: -0.4px; margin-bottom: 3px; }
+.fact-label { font-size: 11px; color: var(--text3); line-height: 1.3; }
+.fact-flag { font-size: 10px; color: var(--amber); margin-top: 4px; display: flex; align-items: center; gap: 3px; }
+
+/* UNRESOLVED */
+.unresolved-items { display: flex; flex-direction: column; gap: 6px; }
+.unres-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 12px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); }
+.unres-icon { width: 22px; height: 22px; border-radius: 50%; background: var(--amber-light); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+.unres-icon svg { width: 11px; height: 11px; color: var(--amber); }
+.unres-text { flex: 1; font-size: 13px; color: var(--text); line-height: 1.4; }
+.unres-sub { font-size: 11px; color: var(--text3); margin-top: 2px; }
+.assign-btn { font-size: 11px; color: var(--accent); background: var(--accent-light); border: 1px solid #bfdbfe; border-radius: 5px; padding: 3px 9px; cursor: pointer; white-space: nowrap; font-family: var(--font); flex-shrink: 0; }
+
+/* DECISIONS */
+.decision-items { display: flex; flex-direction: column; gap: 5px; }
+.decision-item { display: flex; align-items: flex-start; gap: 9px; padding: 9px 12px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); }
+.dec-bullet { width: 18px; height: 18px; border-radius: 50%; background: var(--green-light); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+.dec-bullet svg { width: 9px; height: 9px; color: var(--green); }
+.decision-text { font-size: 13px; color: var(--text); line-height: 1.5; }
+
+/* NOTES */
+.notes-body { font-size: 14px; line-height: 1.8; color: var(--text); }
+.notes-body h3 { font-size: 14px; font-weight: 600; margin: 16px 0 6px; }
+.notes-body p { margin-bottom: 8px; color: var(--text2); }
+.notes-body ul { padding-left: 18px; margin-bottom: 8px; }
+.notes-body li { color: var(--text2); margin-bottom: 3px; font-size: 13px; }
+
+/* NEXT MEETING */
+.next-meeting { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--rl); padding: 13px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.next-meeting-info { font-size: 13px; color: var(--text2); }
+.next-meeting-info strong { color: var(--text); }
+
+/* ── ACTION ITEMS SCREEN ── */
+#screen-actions { flex-direction: column; overflow-y: auto; padding: 24px; }
+.actions-filters { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+.filter-chip { padding: 5px 12px; border-radius: 20px; border: 1px solid var(--border); background: var(--surface); font-size: 12px; color: var(--text2); cursor: pointer; transition: all 0.1s; font-family: var(--font); }
+.filter-chip:hover, .filter-chip.active { background: var(--accent-light); color: var(--accent); border-color: #bfdbfe; }
+
+/* ── MEETINGS SCREEN ── */
+#screen-meetings { flex-direction: column; overflow-y: auto; padding: 24px; }
+.meetings-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.meeting-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--rl); padding: 16px; cursor: pointer; transition: all 0.12s; }
+.meeting-card:hover { border-color: var(--border2); box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+.meeting-card-date { font-size: 11px; color: var(--text3); margin-bottom: 6px; }
+.meeting-card-title { font-size: 14px; font-weight: 500; margin-bottom: 6px; line-height: 1.3; }
+.meeting-card-meta { font-size: 12px; color: var(--text3); margin-bottom: 8px; }
+.meeting-card-preview { font-size: 12px; color: var(--text2); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+/* ── EMAIL LOG ── */
+#screen-email { flex-direction: column; overflow-y: auto; padding: 24px; }
+.email-table { background: var(--surface); border: 1px solid var(--border); border-radius: var(--rl); overflow: hidden; }
+.email-row { display: grid; grid-template-columns: 1fr 160px 120px 80px 100px; padding: 10px 16px; border-bottom: 1px solid var(--border); align-items: center; gap: 12px; transition: background 0.1s; }
+.email-row:last-child { border-bottom: none; }
+.email-row.header { background: var(--bg2); }
+.email-row:not(.header):hover { background: var(--bg2); }
+.email-row .th { font-size: 10px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 0.05em; }
+.email-subject { font-size: 13px; color: var(--text); }
+.email-to { font-size: 12px; color: var(--text2); }
+.email-date { font-size: 12px; color: var(--text3); }
+.email-opens { font-size: 12px; color: var(--text2); display: flex; align-items: center; gap: 4px; }
+
+/* ── TEAM ── */
+#screen-team { flex-direction: column; overflow-y: auto; padding: 24px; }
+.team-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.team-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--rl); padding: 16px; }
+.team-av { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 600; color: #fff; margin-bottom: 10px; }
+.team-name { font-size: 14px; font-weight: 500; margin-bottom: 2px; }
+.team-role { font-size: 12px; color: var(--text3); margin-bottom: 8px; }
+.team-stats { display: flex; gap: 10px; }
+.team-stat { font-size: 11px; color: var(--text3); }
+.team-stat strong { color: var(--text); font-weight: 500; }
+
+/* ── BETTY CORNER ── */
+.betty-corner { position: fixed; bottom: 20px; right: 20px; z-index: 100; }
+.betty-bubble { width: 48px; height: 48px; border-radius: 50%; background: var(--betty); display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 16px rgba(124,58,237,0.35); transition: transform 0.15s, box-shadow 0.15s; position: relative; }
+.betty-bubble:hover { transform: scale(1.06); box-shadow: 0 6px 20px rgba(124,58,237,0.45); }
+.betty-bubble-letter { font-size: 18px; font-weight: 600; color: #fff; font-family: var(--font); }
+.betty-notif { position: absolute; top: -2px; right: -2px; width: 16px; height: 16px; background: var(--red); border-radius: 50%; border: 2px solid var(--bg); display: flex; align-items: center; justify-content: center; }
+.betty-notif span { font-size: 9px; font-weight: 700; color: #fff; }
+.betty-ring { position: absolute; inset: -4px; border-radius: 50%; border: 2px solid var(--betty); opacity: 0; animation: ring 2.5s ease-in-out infinite; }
+@keyframes ring { 0%,100%{opacity:0;transform:scale(1)} 50%{opacity:0.4;transform:scale(1.2)} }
+
+.betty-panel { position: absolute; bottom: 58px; right: 0; width: 320px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--rl); box-shadow: 0 16px 48px rgba(0,0,0,0.12); overflow: hidden; display: none; animation: panelUp 0.2s ease; }
+.betty-panel.open { display: block; }
+@keyframes panelUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+.betty-panel-top { background: var(--betty); padding: 14px 16px; display: flex; align-items: center; gap: 10px; }
+.betty-panel-av { width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 600; color: #fff; flex-shrink: 0; }
+.betty-panel-name { font-size: 14px; font-weight: 600; color: #fff; }
+.betty-panel-state { font-size: 11px; color: rgba(255,255,255,0.7); }
+.betty-close { margin-left: auto; background: none; border: none; color: rgba(255,255,255,0.7); cursor: pointer; font-size: 18px; line-height: 1; padding: 0; }
+.betty-alerts { padding: 10px 8px; display: flex; flex-direction: column; gap: 4px; max-height: 320px; overflow-y: auto; }
+.betty-alert { padding: 10px 12px; border-radius: var(--r); border: 1px solid var(--border); background: var(--bg2); }
+.betty-alert-msg { font-size: 12px; color: var(--text); line-height: 1.5; margin-bottom: 8px; }
+.betty-alert-msg strong { font-weight: 500; }
+.betty-alert-actions { display: flex; gap: 6px; }
+.ba-btn { font-size: 11px; font-weight: 500; padding: 4px 10px; border-radius: 5px; cursor: pointer; font-family: var(--font); border: none; transition: all 0.1s; }
+.ba-yes { background: var(--accent); color: #fff; }
+.ba-yes:hover { background: #1447b8; }
+.ba-no { background: none; color: var(--text2); border: 1px solid var(--border); }
+.ba-no:hover { background: var(--bg3); }
+.ba-review { background: var(--betty); color: #fff; }
+.ba-review:hover { background: #6d28d9; }
+.betty-panel-footer { padding: 10px 12px; border-top: 1px solid var(--border); }
+.betty-footer-btn { width: 100%; padding: 8px; background: var(--betty-light); border: 1px solid var(--betty-mid); border-radius: var(--r); font-family: var(--font); font-size: 12px; font-weight: 500; color: var(--betty); cursor: pointer; transition: background 0.1s; }
+.betty-footer-btn:hover { background: var(--betty-mid); }
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 5px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
 </style>
 </head>
 <body>
-<div class="shell">
 
-<!-- Sidebar -->
-<aside class="sidebar">
-  <div class="sidebar-top">
-    <div class="workspace">
-      <div class="ws-icon">RP</div>
-      <div>
-        <div class="ws-name">Red Penguin</div>
-        <div class="ws-plan">via Zoom · Beta</div>
+<!-- ── LEFT NAV ── -->
+<aside class="leftnav">
+  <div class="nav-top">
+    <div class="logo-row">
+      <div class="logo-mark">
+        <svg viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="5" height="5" rx="1.2" fill="white" opacity="0.9"/><rect x="9" y="2" width="5" height="5" rx="1.2" fill="white" opacity="0.6"/><rect x="2" y="9" width="5" height="5" rx="1.2" fill="white" opacity="0.6"/><rect x="9" y="9" width="5" height="5" rx="1.2" fill="white" opacity="0.3"/></svg>
       </div>
+      <span class="logo-text">MeetingTracker</span>
+      <span class="logo-beta">β</span>
     </div>
+    <button class="nav-btn">
+      <svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      New meeting
+    </button>
   </div>
-
-  <div class="sidebar-section">
-    <div class="sidebar-label">Workspace</div>
-    <button class="nav-item active" onclick="show('dashboard')">
-      <span class="nav-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="6" height="6" rx="1.5" fill="currentColor" opacity=".7"/><rect x="9" y="1" width="6" height="6" rx="1.5" fill="currentColor" opacity=".7"/><rect x="1" y="9" width="6" height="6" rx="1.5" fill="currentColor" opacity=".7"/><rect x="9" y="9" width="6" height="6" rx="1.5" fill="currentColor" opacity=".7"/></svg></span>
+  <div class="nav-items">
+    <button class="nav-item active" onclick="showScreen('dashboard', this)">
+      <svg viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.3"/><rect x="9" y="2" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.3"/><rect x="2" y="9" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.3"/><rect x="9" y="9" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.3"/></svg>
       Dashboard
     </button>
-    <button class="nav-item" onclick="show('items')">
-      <span class="nav-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M2 4h12M2 8h8M2 12h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
-      Action Items
-      <span class="nav-badge">2 overdue</span>
+    <button class="nav-item" onclick="showScreen('actions', this)">
+      <svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.3"/><path d="M8 5v4l2 2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+      Action items
+      <span class="nav-badge">8</span>
     </button>
-    <button class="nav-item" onclick="show('meetings')">
-      <span class="nav-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.3"/><path d="M8 5v3.5l2 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></span>
+    <button class="nav-item" onclick="showScreen('meetings', this)">
+      <svg viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="11" rx="2" stroke="currentColor" stroke-width="1.3"/><path d="M5 2v2M11 2v2M2 7h12" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
       Meetings
     </button>
-    <button class="nav-item" onclick="show('email')">
-      <span class="nav-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="1.5" y="3.5" width="13" height="9" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M1.5 5.5l6.5 4 6.5-4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></span>
-      Email Log
+    <button class="nav-item" onclick="showScreen('minutes', this)">
+      <svg viewBox="0 0 16 16" fill="none"><rect x="3" y="2" width="10" height="12" rx="2" stroke="currentColor" stroke-width="1.3"/><path d="M6 6h4M6 9h3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+      Minutes
+      <span class="nav-badge" style="background:var(--betty)">3</span>
     </button>
-    <button class="nav-item" onclick="show('team')">
-      <span class="nav-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="6" cy="5" r="2.5" stroke="currentColor" stroke-width="1.3"/><path d="M1 13c0-2.76 2.24-5 5-5s5 2.24 5 5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="12" cy="5" r="2" stroke="currentColor" stroke-width="1.3"/><path d="M14 13c0-2.21-1.34-4-3-4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></span>
+    <button class="nav-item" onclick="showScreen('email', this)">
+      <svg viewBox="0 0 16 16" fill="none"><rect x="2" y="4" width="12" height="9" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M2 5l6 5 6-5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Email log
+    </button>
+    <div class="nav-divider"></div>
+    <button class="nav-item" onclick="showScreen('team', this)">
+      <svg viewBox="0 0 16 16" fill="none"><circle cx="6" cy="6" r="2.5" stroke="currentColor" stroke-width="1.3"/><path d="M1 14c0-2.76 2.24-5 5-5s5 2.24 5 5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="12" cy="5" r="2" stroke="currentColor" stroke-width="1.3"/><path d="M14 13c0-2.21-1.34-4-3-4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
       Team
     </button>
   </div>
-
-  <div class="sidebar-footer">
-    <div class="status-row"><div class="status-dot" style="background:var(--green);"></div><span class="status-label">Zoom connected</span></div>
-    <div class="status-row"><div class="status-dot" style="background:var(--green);"></div><span class="status-label">O365 email active</span></div>
+  <div class="nav-bottom">
+    <div class="profile-row">
+      <div class="p-av"><img src="https://i.pravatar.cc/56?img=52" alt="" onerror="this.style.display='none'">EM</div>
+      <div><div class="p-name">Eric Miller</div><div class="p-sub">Red Penguin · Pro</div></div>
+    </div>
   </div>
 </aside>
 
-<!-- Main -->
-<main class="main" id="mc"></main>
+<!-- ── MAIN ── -->
+<main class="main">
+
+  <!-- TOPBAR -->
+  <div class="topbar" id="topbar">
+    <div class="breadcrumb" id="breadcrumb">
+      <span>Dashboard</span>
+    </div>
+    <div class="topbar-actions">
+      <button class="btn btn-ghost">
+        <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><circle cx="6" cy="6" r="4.5" stroke="currentColor" stroke-width="1.4"/><path d="M10 10l2.5 2.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+        Search
+      </button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- ── DASHBOARD ── -->
+    <div class="screen active" id="screen-dashboard">
+      <div class="dash-main">
+        <div class="welcome-row">
+          <div class="welcome-text">
+            <h2>Good morning, Eric</h2>
+            <p>Sunday, April 12 · 3 meetings need your review</p>
+          </div>
+        </div>
+
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="stat-num" style="color:var(--amber)">8</div>
+            <div class="stat-label">Open tasks</div>
+            <div class="stat-sub">Across 3 projects</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num" style="color:var(--betty)">3</div>
+            <div class="stat-label">Pending review</div>
+            <div class="stat-sub">Betty is waiting</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num" style="color:var(--red)">2</div>
+            <div class="stat-label">Overdue</div>
+            <div class="stat-sub">Needs attention</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num" style="color:var(--green)">14</div>
+            <div class="stat-label">Completed this week</div>
+            <div class="stat-sub">Good momentum</div>
+          </div>
+        </div>
+
+        <div class="section-head">
+          <div class="section-title">My open tasks <span class="pill pill-amber">8 open</span></div>
+          <button class="btn btn-ghost" onclick="showScreen('actions', document.querySelector('[onclick*=actions]'))">View all</button>
+        </div>
+        <div class="task-card" style="margin-bottom:20px">
+          <div class="task-card-row header">
+            <span></span><span>Task</span><span>Assignee</span><span>Due</span><span>Priority</span>
+          </div>
+          <div class="task-card-row">
+            <div class="task-check" onclick="toggleCheck(this)"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div><div class="task-text">Finalize FF&E vendor shortlist for guest rooms</div><div style="margin-top:3px"><span class="proj-tag" style="background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;font-size:10px">Four Seasons</span></div></div>
+            <div class="assignee-cell"><div class="mini-av" style="background:#2563eb">EM</div>Eric Miller</div>
+            <div class="due-cell soon">Apr 17</div>
+            <span class="pri pri-h">High</span>
+          </div>
+          <div class="task-card-row">
+            <div class="task-check" onclick="toggleCheck(this)"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div><div class="task-text">Review Four Seasons concept documentation</div><div style="margin-top:3px"><span class="proj-tag" style="background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;font-size:10px">Four Seasons</span></div></div>
+            <div class="assignee-cell"><div class="mini-av" style="background:#2563eb">EM</div>Eric Miller</div>
+            <div class="due-cell soon">Apr 14</div>
+            <span class="pri pri-h">High</span>
+          </div>
+          <div class="task-card-row">
+            <div class="task-check" onclick="toggleCheck(this)"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div><div class="task-text">F&B P&L deep dive — Latitude 28 cost analysis</div><div style="margin-top:3px"><span class="proj-tag" style="background:#f0fdf4;color:#166534;border:1px solid #bbf7d0;font-size:10px">JW Marriott</span></div></div>
+            <div class="assignee-cell"><div class="mini-av" style="background:#2563eb">EM</div>Eric Miller</div>
+            <div class="due-cell overdue">Apr 10</div>
+            <span class="pri pri-h">High</span>
+          </div>
+          <div class="task-card-row">
+            <div class="task-check" onclick="toggleCheck(this)"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div><div class="task-text">Schedule walkthrough of sample room with GC</div><div style="margin-top:3px"><span class="proj-tag" style="background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;font-size:10px">Four Seasons</span></div></div>
+            <div class="assignee-cell"><div class="mini-av" style="background:#2563eb">EM</div>Eric Miller</div>
+            <div class="due-cell">Apr 30</div>
+            <span class="pri pri-l">Low</span>
+          </div>
+        </div>
+
+        <div class="section-head">
+          <div class="section-title">Recent activity</div>
+        </div>
+        <div class="activity-list">
+          <div class="activity-item">
+            <div class="act-av" style="background:#d97706">MD</div>
+            <div class="act-text"><strong>Michael Doneff</strong> marked "Send F&B concept deck" as complete</div>
+            <div class="act-time">1h ago</div>
+          </div>
+          <div class="activity-item">
+            <div class="act-av" style="background:#7c3aed">B</div>
+            <div class="act-text"><strong>Betty</strong> extracted 6 action items from F&B Programming Review — ready for your review</div>
+            <div class="act-time">2h ago</div>
+          </div>
+          <div class="activity-item">
+            <div class="act-av" style="background:#16a34a">SK</div>
+            <div class="act-text"><strong>Sarah Kim</strong> viewed the FF&E Schedule Review minutes</div>
+            <div class="act-time">3h ago</div>
+          </div>
+          <div class="activity-item">
+            <div class="act-av" style="background:#7c3aed">B</div>
+            <div class="act-text"><strong>Betty</strong> sent a nudge to James Patel — Smartcon RFQ review is due in 2 days</div>
+            <div class="act-time">Yesterday</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dash-right">
+        <div class="rp-section">
+          <div class="rp-label">Projects</div>
+          <div class="proj-list">
+            <div class="proj-item" onclick="showScreen('minutes', document.querySelector('[onclick*=minutes]'))">
+              <div class="proj-item-top"><div class="proj-dot" style="background:#2563eb"></div><div class="proj-name">Four Seasons Charleston</div></div>
+              <div class="proj-item-stats"><span class="proj-stat">5 open tasks</span><span class="proj-stat">·</span><span class="proj-stat">3 meetings</span></div>
+            </div>
+            <div class="proj-item">
+              <div class="proj-item-top"><div class="proj-dot" style="background:#16a34a"></div><div class="proj-name">JW Marriott Clearwater</div></div>
+              <div class="proj-item-stats"><span class="proj-stat">3 open tasks</span><span class="proj-stat">·</span><span class="proj-stat">4 meetings</span></div>
+            </div>
+            <div class="proj-item">
+              <div class="proj-item-top"><div class="proj-dot" style="background:#7c3aed"></div><div class="proj-name">Patel Foundation</div></div>
+              <div class="proj-item-stats"><span class="proj-stat">0 open tasks</span><span class="proj-stat">·</span><span class="proj-stat">2 meetings</span></div>
+            </div>
+            <div class="proj-item">
+              <div class="proj-item-top"><div class="proj-dot" style="background:#dc2626"></div><div class="proj-name">MeetingTracker</div></div>
+              <div class="proj-item-stats"><span class="proj-stat">2 open tasks</span><span class="proj-stat">·</span><span class="proj-stat">1 meeting</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="rp-section">
+          <div class="rp-label">Betty's watch list</div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="padding:8px 10px;background:var(--betty-light);border:1px solid var(--betty-mid);border-radius:var(--r);font-size:12px;color:var(--betty);line-height:1.5">Pool bar service model — open 13 days, 3 meetings, no owner</div>
+            <div style="padding:8px 10px;background:var(--amber-light);border:1px solid #fde68a;border-radius:var(--r);font-size:12px;color:var(--amber);line-height:1.5">F&B P&L analysis overdue — assigned to you</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── MINUTES SCREEN ── -->
+    <div class="screen" id="screen-minutes">
+      <div class="minutes-list">
+        <div class="minutes-list-top">
+          <div class="minutes-list-title">
+            Meeting minutes
+            <span class="pill pill-amber">3 drafts</span>
+          </div>
+          <div class="search-box">
+            <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><circle cx="6" cy="6" r="4.5" stroke="currentColor" stroke-width="1.4"/><path d="M10 10l2.5 2.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+            <input type="text" placeholder="Search minutes…">
+          </div>
+        </div>
+
+        <!-- Four Seasons Group -->
+        <div class="proj-group">
+          <div class="proj-group-header" onclick="toggleGroup(this.parentElement)">
+            <div class="proj-group-dot" style="background:#2563eb"></div>
+            <span class="proj-group-name">Four Seasons Charleston</span>
+            <span class="proj-group-count">3</span>
+            <svg class="proj-group-chev" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 5l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="proj-meeting-list">
+            <div class="minute-item active" onclick="selectMinute(this)">
+              <div class="minute-item-date">Apr 10, 2026 <span class="status-badge status-review">Betty review</span></div>
+              <div class="minute-item-title">F&B Programming Review</div>
+              <div class="minute-item-preview">Big concern surfaced — 299 proposed seats may exceed kitchen capacity. Team agreed to pause FF&E design...</div>
+            </div>
+            <div class="minute-item" onclick="selectMinute(this)">
+              <div class="minute-item-date">Apr 7, 2026 <span class="status-badge status-draft">Draft</span></div>
+              <div class="minute-item-title">Lark Design Scope Call</div>
+              <div class="minute-item-preview">Revision round limitations flagged. Phase categorization needs alignment between Exhibits B and G...</div>
+            </div>
+            <div class="minute-item" onclick="selectMinute(this)">
+              <div class="minute-item-date">Apr 3, 2026 <span class="status-badge status-sent">Sent</span></div>
+              <div class="minute-item-title">Lutron Lighting Review</div>
+              <div class="minute-item-preview">King room scope reduced from 11 zones to 2. Smartcon and Trident RFQs drafted...</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- JW Marriott Group -->
+        <div class="proj-group">
+          <div class="proj-group-header" onclick="toggleGroup(this.parentElement)">
+            <div class="proj-group-dot" style="background:#16a34a"></div>
+            <span class="proj-group-name">JW Marriott Clearwater</span>
+            <span class="proj-group-count">2</span>
+            <svg class="proj-group-chev" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 5l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="proj-meeting-list">
+            <div class="minute-item" onclick="selectMinute(this)">
+              <div class="minute-item-date">Apr 9, 2026 <span class="status-badge status-draft">Draft</span></div>
+              <div class="minute-item-title">F&B Optimization Sync</div>
+              <div class="minute-item-preview">Latitude 28 identified as primary cost problem. Lobby Lounge performing well...</div>
+            </div>
+            <div class="minute-item" onclick="selectMinute(this)">
+              <div class="minute-item-date">Apr 4, 2026 <span class="status-badge status-sent">Sent</span></div>
+              <div class="minute-item-title">Engineering Audit Prep</div>
+              <div class="minute-item-preview">CapEx gap analysis ready. DOE/GM/Finance meeting prep materials complete...</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Patel Foundation -->
+        <div class="proj-group closed">
+          <div class="proj-group-header" onclick="toggleGroup(this.parentElement)">
+            <div class="proj-group-dot" style="background:#7c3aed"></div>
+            <span class="proj-group-name">Patel Foundation</span>
+            <span class="proj-group-count">1</span>
+            <svg class="proj-group-chev" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 5l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="proj-meeting-list">
+            <div class="minute-item" onclick="selectMinute(this)">
+              <div class="minute-item-date">Apr 2, 2026 <span class="status-badge status-sent">Sent</span></div>
+              <div class="minute-item-title">Asset Management Review</div>
+              <div class="minute-item-preview">Lease billing discrepancy confirmed at 27,094 SF...</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- MeetingTracker -->
+        <div class="proj-group closed">
+          <div class="proj-group-header" onclick="toggleGroup(this.parentElement)">
+            <div class="proj-group-dot" style="background:#dc2626"></div>
+            <span class="proj-group-name">MeetingTracker</span>
+            <span class="proj-group-count">1</span>
+            <svg class="proj-group-chev" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 5l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="proj-meeting-list">
+            <div class="minute-item" onclick="selectMinute(this)">
+              <div class="minute-item-date">Apr 8, 2026 <span class="status-badge status-sent">Sent</span></div>
+              <div class="minute-item-title">Sprint Review — Betty v1</div>
+              <div class="minute-item-preview">Review queue built. Betty corner presence approved. Next: wire to backend...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MINUTE DETAIL -->
+      <div class="minute-detail">
+
+        <!-- TLDR -->
+        <div class="detail-section">
+          <div class="detail-section-head">
+            <div class="detail-section-label">
+              <div style="width:16px;height:16px;border-radius:50%;background:var(--betty);display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:600;color:#fff;flex-shrink:0">B</div>
+              TL;DR
+            </div>
+          </div>
+          <div class="tldr-card">
+            <div class="tldr-header">
+              <div class="tldr-betty-av">B</div>
+              <span class="tldr-label">Betty's summary</span>
+              <span class="tldr-tone">Conversational</span>
+            </div>
+            <textarea class="tldr-text" rows="4" oninput="autoResize(this)">Big concern surfaced today — 299 proposed seats may exceed what the kitchen can actually handle. Team agreed to pause FF&E design until programming documents are exchanged and reviewed. Buffet format and retail lease structure are locked. Pool bar service model is still without an owner after three meetings — needs resolution soon. Six tasks assigned, three items still need an owner.</textarea>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- MEETING META -->
+        <input class="detail-title" value="F&B Programming Review">
+        <div class="detail-meta">
+          <div class="meta-chip"><svg viewBox="0 0 14 14" fill="none"><rect x="1.5" y="2.5" width="11" height="10" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M5 1.5v2M9 1.5v2M1.5 6h11" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg> April 10, 2026 · 2:00 PM</div>
+          <div class="meta-chip"><svg viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.3"/><path d="M7 4v3.5l2 2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg> 68 min</div>
+          <div class="meta-chip">via Zoom</div>
+          <span class="proj-tag" style="background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe"><div style="width:6px;height:6px;border-radius:50%;background:#2563eb"></div>Four Seasons Charleston</span>
+        </div>
+        <div class="attendee-row" style="margin-top:10px">
+          <div class="att-chip"><div class="att-chip-av" style="background:#2563eb">EM</div>Eric Miller</div>
+          <div class="att-chip"><div class="att-chip-av" style="background:#d97706">MD</div>M. Doneff</div>
+          <div class="att-chip"><div class="att-chip-av" style="background:#0e9f6e">MG</div>M. Green</div>
+          <div class="att-chip"><div class="att-chip-av" style="background:#7c3aed">DT</div>D. Thomas</div>
+          <button class="add-att">+ Add</button>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- ACTION ITEMS -->
+        <div class="detail-section">
+          <div class="detail-section-head">
+            <div class="detail-section-label">Action items <span class="pill pill-amber">5 open</span> <span class="pill pill-green">2 done</span></div>
+            <button class="btn btn-ghost" style="font-size:11px;padding:4px 10px">Filter</button>
+          </div>
+          <div class="task-card">
+            <div class="task-card-row header"><span></span><span>Task</span><span>Assignee</span><span>Due</span><span>Priority</span></div>
+            <div class="task-card-row">
+              <div class="task-check" onclick="toggleCheck(this)"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <div class="task-text">Send Lark furniture plans to Four Seasons team</div>
+              <div class="assignee-cell"><div class="mini-av" style="background:#2563eb">EM</div>Eric Miller</div>
+              <div class="due-cell soon">Apr 14</div>
+              <span class="pri pri-h">High</span>
+            </div>
+            <div class="task-card-row">
+              <div class="task-check" onclick="toggleCheck(this)"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <div class="task-text">Send F&B concept deck with programming documents</div>
+              <div class="assignee-cell"><div class="mini-av" style="background:#d97706">MD</div>M. Doneff</div>
+              <div class="due-cell">Apr 17</div>
+              <span class="pri pri-h">High</span>
+            </div>
+            <div class="task-card-row">
+              <div class="task-check" onclick="toggleCheck(this)"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <div class="task-text">Review kitchen capacity for 299 seat count</div>
+              <div class="assignee-cell"><div class="mini-av" style="background:#7c3aed">DT</div>D. Thomas</div>
+              <div class="due-cell">Apr 21</div>
+              <span class="pri pri-m">Medium</span>
+            </div>
+            <div class="task-card-row">
+              <div class="task-check done" onclick="toggleCheck(this)"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <div class="task-text done">Share Gantt schedule with Lark Design Studio</div>
+              <div class="assignee-cell"><div class="mini-av" style="background:#2563eb">EM</div>Eric Miller</div>
+              <div class="due-cell">Apr 8</div>
+              <span class="pri pri-h">High</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- UNRESOLVED -->
+        <div class="detail-section">
+          <div class="detail-section-head">
+            <div class="detail-section-label">Unresolved — needs an owner <span class="pill pill-amber">3</span></div>
+          </div>
+          <div class="unresolved-items">
+            <div class="unres-item">
+              <div class="unres-icon"><svg viewBox="0 0 12 12" fill="none"><path d="M6 2v5M6 9v1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+              <div class="unres-text">Narrow corridor seating removal — strong consensus, no owner assigned<div class="unres-sub">Appeared in 1 prior meeting · Apr 3</div></div>
+              <button class="assign-btn">Assign</button>
+            </div>
+            <div class="unres-item">
+              <div class="unres-icon"><svg viewBox="0 0 12 12" fill="none"><path d="M6 2v5M6 9v1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+              <div class="unres-text">Pool bar service model — mobile tablet and production bar still undefined<div class="unres-sub">3 meetings unresolved · open since Mar 28</div></div>
+              <button class="assign-btn">Assign</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- DECISIONS -->
+        <div class="detail-section">
+          <div class="detail-section-head">
+            <div class="detail-section-label">Decisions made</div>
+          </div>
+          <div class="decision-items">
+            <div class="decision-item"><div class="dec-bullet"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div><div class="decision-text">8th floor restaurant confirmed as breakfast and dinner only — no lunch, weekend brunch TBD</div></div>
+            <div class="decision-item"><div class="dec-bullet"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div><div class="decision-text">Buffet approach: continental only — cold items, no large hot buffets</div></div>
+            <div class="decision-item"><div class="dec-bullet"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div><div class="decision-text">Specialty restaurant confirmed as third-party lease — all ground-floor retail spaces leased</div></div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- FACTS MENTIONED -->
+        <div class="detail-section">
+          <div class="detail-section-head">
+            <div class="detail-section-label">Facts mentioned <span class="pill pill-amber">1 flagged</span></div>
+          </div>
+          <div class="facts-grid">
+            <div class="fact-card flagged"><div class="fact-value">299</div><div class="fact-label">Total proposed seats</div><div class="fact-flag"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M6 2v5M6 9v1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Verify vs kitchen capacity</div></div>
+            <div class="fact-card"><div class="fact-value">121</div><div class="fact-label">Outdoor seats — mostly exposed</div></div>
+            <div class="fact-card"><div class="fact-value">90</div><div class="fact-label">Main dining seats</div></div>
+            <div class="fact-card"><div class="fact-value">88</div><div class="fact-label">Flex space seats</div></div>
+            <div class="fact-card"><div class="fact-value">9</div><div class="fact-label">Bar stools at main bar</div></div>
+            <div class="fact-card"><div class="fact-value">5</div><div class="fact-label">Tables with awning coverage</div></div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- NOTES -->
+        <div class="detail-section">
+          <div class="detail-section-head"><div class="detail-section-label">Meeting notes</div></div>
+          <div class="notes-body" contenteditable="true">
+            <h3>F&B Programming</h3>
+            <p>Major concern identified — Lark's furniture plans show 299 total seats that may exceed kitchen capacity and create uncomfortable dining experiences. Team agreed to pause FF&E design, exchange programming documents, and reconvene after mutual review.</p>
+            <h3>8th floor restaurant</h3>
+            <p>Confirmed as breakfast and dinner service only, not lunch. Sunset dining concept confirmed. Weekend brunch still under consideration.</p>
+            <h3>Buffet approach</h3>
+            <p>Continental only — cold items including croissants, fruit, yogurt. No large hot buffets except high-volume locations like ski resorts.</p>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- NEXT MEETING -->
+        <div class="detail-section">
+          <div class="detail-section-head"><div class="detail-section-label">Next meeting</div></div>
+          <div class="next-meeting">
+            <div class="next-meeting-info"><strong>F&B Vendor Final Review</strong> — <strong>April 24, 2026 at 2:00 PM</strong><div style="font-size:11px;color:var(--text3);margin-top:3px">14 days away · Same attendees</div></div>
+            <button class="btn btn-ghost" style="font-size:11px;white-space:nowrap">Add to calendar</button>
+          </div>
+        </div>
+
+        <div style="height:60px"></div>
+      </div>
+    </div>
+
+    <!-- ── ACTION ITEMS SCREEN ── -->
+    <div class="screen" id="screen-actions">
+      <div style="max-width:900px;width:100%">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+          <div>
+            <h2 style="font-size:18px;font-weight:600;letter-spacing:-0.3px;margin-bottom:3px">Action items</h2>
+            <p style="font-size:13px;color:var(--text2)">All open tasks across your projects</p>
+          </div>
+          <button class="btn btn-primary">+ Add task</button>
+        </div>
+        <div class="actions-filters">
+          <button class="filter-chip active">All projects</button>
+          <button class="filter-chip">Four Seasons</button>
+          <button class="filter-chip">JW Marriott</button>
+          <button class="filter-chip">Patel Foundation</button>
+          <button class="filter-chip">Assigned to me</button>
+          <button class="filter-chip">Overdue</button>
+          <button class="filter-chip">High priority</button>
+        </div>
+        <div class="task-card">
+          <div class="task-card-row header"><span></span><span>Task</span><span>Assignee</span><span>Due</span><span>Priority</span></div>
+          <div class="task-card-row"><div class="task-check" onclick="toggleCheck(this)"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="task-text">F&B P&L deep dive — Latitude 28 cost analysis</div><div style="margin-top:3px"><span class="proj-tag" style="background:#f0fdf4;color:#166534;border:1px solid #bbf7d0;font-size:10px">JW Marriott</span></div></div><div class="assignee-cell"><div class="mini-av" style="background:#2563eb">EM</div>Eric Miller</div><div class="due-cell overdue">Apr 10</div><span class="pri pri-h">High</span></div>
+          <div class="task-card-row"><div class="task-check" onclick="toggleCheck(this)"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="task-text">Send Lark furniture plans to Four Seasons team</div><div style="margin-top:3px"><span class="proj-tag" style="background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;font-size:10px">Four Seasons</span></div></div><div class="assignee-cell"><div class="mini-av" style="background:#2563eb">EM</div>Eric Miller</div><div class="due-cell soon">Apr 14</div><span class="pri pri-h">High</span></div>
+          <div class="task-card-row"><div class="task-check" onclick="toggleCheck(this)"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="task-text">Send Lark revised scope doc with phase breakdown</div><div style="margin-top:3px"><span class="proj-tag" style="background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;font-size:10px">Four Seasons</span></div></div><div class="assignee-cell"><div class="mini-av" style="background:#16a34a">SK</div>Sarah Kim</div><div class="due-cell soon">Apr 14</div><span class="pri pri-h">High</span></div>
+          <div class="task-card-row"><div class="task-check" onclick="toggleCheck(this)"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="task-text">Finalize FF&E vendor shortlist for guest rooms</div><div style="margin-top:3px"><span class="proj-tag" style="background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;font-size:10px">Four Seasons</span></div></div><div class="assignee-cell"><div class="mini-av" style="background:#2563eb">EM</div>Eric Miller</div><div class="due-cell soon">Apr 17</div><span class="pri pri-h">High</span></div>
+          <div class="task-card-row"><div class="task-check" onclick="toggleCheck(this)"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="task-text">Review kitchen capacity for 299 seat count</div><div style="margin-top:3px"><span class="proj-tag" style="background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;font-size:10px">Four Seasons</span></div></div><div class="assignee-cell"><div class="mini-av" style="background:#7c3aed">DT</div>D. Thomas</div><div class="due-cell">Apr 21</div><span class="pri pri-m">Medium</span></div>
+          <div class="task-card-row"><div class="task-check" onclick="toggleCheck(this)"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="task-text">Schedule walkthrough of sample room with GC</div><div style="margin-top:3px"><span class="proj-tag" style="background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;font-size:10px">Four Seasons</span></div></div><div class="assignee-cell"><div class="mini-av" style="background:#2563eb">EM</div>Eric Miller</div><div class="due-cell">Apr 30</div><span class="pri pri-l">Low</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── MEETINGS SCREEN ── -->
+    <div class="screen" id="screen-meetings">
+      <div style="max-width:960px;width:100%">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+          <div><h2 style="font-size:18px;font-weight:600;letter-spacing:-0.3px;margin-bottom:3px">Meetings</h2><p style="font-size:13px;color:var(--text2)">All meetings across your projects</p></div>
+          <button class="btn btn-primary">+ New meeting</button>
+        </div>
+        <div class="meetings-grid">
+          <div class="meeting-card"><div class="meeting-card-date">Apr 10, 2026 · <span class="status-badge status-review">Betty review</span></div><div class="meeting-card-title">F&B Programming Review</div><div class="meeting-card-meta">2:00 PM · 68 min · 5 attendees</div><div class="meeting-card-preview">Big concern — 299 seats may exceed kitchen capacity. FF&E design paused pending document exchange.</div></div>
+          <div class="meeting-card"><div class="meeting-card-date">Apr 9, 2026 · <span class="status-badge status-draft">Draft</span></div><div class="meeting-card-title">F&B Optimization Sync</div><div class="meeting-card-meta">10:00 AM · 47 min · 4 attendees</div><div class="meeting-card-preview">Latitude 28 identified as primary cost problem with excessive management overhead.</div></div>
+          <div class="meeting-card"><div class="meeting-card-date">Apr 7, 2026 · <span class="status-badge status-draft">Draft</span></div><div class="meeting-card-title">Lark Design Scope Call</div><div class="meeting-card-meta">2:15 PM · 32 min · 3 attendees</div><div class="meeting-card-preview">Revision round limitations flagged. Phase categorization misalignment between Exhibits B and G.</div></div>
+          <div class="meeting-card"><div class="meeting-card-date">Apr 4, 2026 · <span class="status-badge status-sent">Sent</span></div><div class="meeting-card-title">FF&E Schedule Review</div><div class="meeting-card-meta">9:30 AM · 55 min · 5 attendees</div><div class="meeting-card-preview">October 2026 deadline confirmed. Rachel to finalize spec sheet by Friday.</div></div>
+          <div class="meeting-card"><div class="meeting-card-date">Apr 3, 2026 · <span class="status-badge status-sent">Sent</span></div><div class="meeting-card-title">Lutron Lighting Review</div><div class="meeting-card-meta">11:00 AM · 41 min · 4 attendees</div><div class="meeting-card-preview">King room scope reduced to 2 zones. Smartcon RFQ drafted to Trident.</div></div>
+          <div class="meeting-card"><div class="meeting-card-date">Apr 2, 2026 · <span class="status-badge status-sent">Sent</span></div><div class="meeting-card-title">Asset Management Review</div><div class="meeting-card-meta">3:00 PM · 38 min · 3 attendees</div><div class="meeting-card-preview">Lease billing discrepancy confirmed at 27,094 SF. Agreement commencing May 1.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── EMAIL LOG ── -->
+    <div class="screen" id="screen-email">
+      <div style="max-width:960px;width:100%">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+          <div><h2 style="font-size:18px;font-weight:600;letter-spacing:-0.3px;margin-bottom:3px">Email log</h2><p style="font-size:13px;color:var(--text2)">All emails sent by Betty on your behalf</p></div>
+        </div>
+        <div class="email-table">
+          <div class="email-row header"><span class="th">Subject</span><span class="th">Sent to</span><span class="th">Date</span><span class="th">Opens</span><span class="th">Status</span></div>
+          <div class="email-row"><div class="email-subject">FF&E Schedule Review — Minutes</div><div class="email-to">5 recipients</div><div class="email-date">Apr 4, 9:45 AM</div><div class="email-opens">4 of 5</div><span class="status-badge status-sent">Delivered</span></div>
+          <div class="email-row"><div class="email-subject">Lutron Lighting Review — Minutes</div><div class="email-to">4 recipients</div><div class="email-date">Apr 3, 11:52 AM</div><div class="email-opens">3 of 4</div><span class="status-badge status-sent">Delivered</span></div>
+          <div class="email-row"><div class="email-subject">Asset Management Review — Minutes</div><div class="email-to">3 recipients</div><div class="email-date">Apr 2, 3:38 PM</div><div class="email-opens">3 of 3</div><span class="status-badge status-sent">Delivered</span></div>
+          <div class="email-row"><div class="email-subject">Nudge: Smartcon RFQ review due Apr 21</div><div class="email-to">James Patel</div><div class="email-date">Apr 11, 9:00 AM</div><div class="email-opens">1 of 1</div><span class="status-badge status-sent">Delivered</span></div>
+          <div class="email-row"><div class="email-subject">Availability poll — F&B Vendor Review</div><div class="email-to">5 recipients</div><div class="email-date">Apr 4, 9:46 AM</div><div class="email-opens">4 of 5</div><span class="pill pill-amber">2 of 5 responded</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── TEAM ── -->
+    <div class="screen" id="screen-team">
+      <div style="max-width:900px;width:100%">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+          <div><h2 style="font-size:18px;font-weight:600;letter-spacing:-0.3px;margin-bottom:3px">Team</h2><p style="font-size:13px;color:var(--text2)">Speaker registry — attendees across all projects</p></div>
+          <button class="btn btn-primary">+ Add person</button>
+        </div>
+        <div class="team-grid">
+          <div class="team-card"><div class="team-av" style="background:#2563eb">EM</div><div class="team-name">Eric Miller</div><div class="team-role">Red Penguin Consulting</div><div class="team-stats"><div class="team-stat"><strong>12</strong> meetings</div><div class="team-stat"><strong>4</strong> open tasks</div></div></div>
+          <div class="team-card"><div class="team-av" style="background:#d97706">MD</div><div class="team-name">Michael Doneff</div><div class="team-role">Four Seasons — F&B</div><div class="team-stats"><div class="team-stat"><strong>3</strong> meetings</div><div class="team-stat"><strong>2</strong> open tasks</div></div></div>
+          <div class="team-card"><div class="team-av" style="background:#0e9f6e">MG</div><div class="team-name">Michael Green</div><div class="team-role">Four Seasons — Development</div><div class="team-stats"><div class="team-stat"><strong>3</strong> meetings</div><div class="team-stat"><strong>1</strong> open task</div></div></div>
+          <div class="team-card"><div class="team-av" style="background:#7c3aed">DT</div><div class="team-name">David Thomas</div><div class="team-role">Four Seasons — Culinary</div><div class="team-stats"><div class="team-stat"><strong>1</strong> meeting</div><div class="team-stat"><strong>1</strong> open task</div></div></div>
+          <div class="team-card"><div class="team-av" style="background:#16a34a">SK</div><div class="team-name">Sarah Kim</div><div class="team-role">Red Penguin Consulting</div><div class="team-stats"><div class="team-stat"><strong>5</strong> meetings</div><div class="team-stat"><strong>1</strong> open task</div></div></div>
+          <div class="team-card"><div class="team-av" style="background:#dc2626">CM</div><div class="team-name">Colin Mills</div><div class="team-role">JW Marriott — GM</div><div class="team-stats"><div class="team-stat"><strong>4</strong> meetings</div><div class="team-stat"><strong>0</strong> open tasks</div></div></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- ── BETTY CORNER ── -->
+<div class="betty-corner">
+  <div class="betty-panel" id="bettyPanel">
+    <div class="betty-panel-top">
+      <div class="betty-panel-av">B</div>
+      <div>
+        <div class="betty-panel-name">Betty</div>
+        <div class="betty-panel-state">3 things need your attention</div>
+      </div>
+      <button class="betty-close" onclick="toggleBetty()">×</button>
+    </div>
+    <div class="betty-alerts">
+      <div class="betty-alert">
+        <div class="betty-alert-msg"><strong>3 meetings</strong> are ready for your review — F&B Programming Review is the oldest at 2 hours.</div>
+        <div class="betty-alert-actions">
+          <button class="ba-btn ba-review" onclick="showScreen('minutes', document.querySelector('[onclick*=minutes]'));toggleBetty()">Review now</button>
+          <button class="ba-btn ba-no">Later</button>
+        </div>
+      </div>
+      <div class="betty-alert">
+        <div class="betty-alert-msg"><strong>James Patel</strong> hasn't acknowledged the Smartcon RFQ task — due in 2 days. Want me to nudge him?</div>
+        <div class="betty-alert-actions">
+          <button class="ba-btn ba-yes" onclick="dismissAlert(this)">Yes, nudge him</button>
+          <button class="ba-btn ba-no" onclick="dismissAlert(this)">Not yet</button>
+        </div>
+      </div>
+      <div class="betty-alert">
+        <div class="betty-alert-msg"><strong>Pool bar service model</strong> has been open 13 days across 3 meetings. Still no owner. Want me to flag it on the next Four Seasons call?</div>
+        <div class="betty-alert-actions">
+          <button class="ba-btn ba-yes" onclick="dismissAlert(this)">Yes, flag it</button>
+          <button class="ba-btn ba-no" onclick="dismissAlert(this)">Dismiss</button>
+        </div>
+      </div>
+    </div>
+    <div class="betty-panel-footer">
+      <button class="betty-footer-btn" onclick="showScreen('minutes', document.querySelector('[onclick*=minutes]'));toggleBetty()">Open full review queue</button>
+    </div>
+  </div>
+  <div class="betty-bubble" onclick="toggleBetty()">
+    <div class="betty-ring"></div>
+    <span class="betty-bubble-letter">B</span>
+    <div class="betty-notif"><span>3</span></div>
+  </div>
+</div>
+
+<!-- ── SEND BAR (minutes screen only) ── -->
+<div id="sendBar" style="display:none;position:fixed;bottom:0;left:220px;right:0;background:var(--surface);border-top:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;z-index:50">
+  <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--text2)">
+    <div style="font-size:12px;color:var(--text3);background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:5px 10px;font-family:var(--mono)">app.meetingtracker.io/m/fsc-apr10</div>
+    <span style="font-size:12px;color:var(--text3)">4 attendees will receive this</span>
+  </div>
+  <div style="display:flex;gap:8px">
+    <button class="btn btn-ghost">Save draft</button>
+    <button class="btn btn-green">
+      <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M1 7l11-5-5 11-1.5-4.5L1 7z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+      Approve &amp; send
+    </button>
+  </div>
 </div>
 
 <script>
-const AVC=["#2F6FED","#2D9E6E","#D44C47","#C08B1A","#7C52C8","#0891B2","#BE4BDB"];
-const avc=n=>AVC[n.charCodeAt(0)%AVC.length];
-const ini=n=>n.split(" ").map(w=>w[0]).join("").toUpperCase().slice(0,2);
-const fmt=d=>new Date(d).toLocaleDateString("en-US",{month:"short",day:"numeric"});
-const T=new Date();
-const dOff=o=>{const x=new Date(T);x.setDate(x.getDate()+o);return x;};
-const av=(n,sz=24)=>`<div class="avatar" style="width:${sz}px;height:${sz}px;background:${avc(n)};font-size:${Math.round(sz*.38)}px;">${ini(n)}</div>`;
-const avatarStack=(attendees,sz=22)=>{
-  const show=attendees.slice(0,4);
-  const extra=attendees.length-4;
-  return`<div class="avatar-stack">${show.map((a,i)=>`<div style="margin-left:${i?-6:0}px;">${av(a,sz)}</div>`).join("")}${extra>0?`<div class="avatar-overflow" style="width:${sz}px;height:${sz}px;margin-left:-6px;font-size:9px;">+${extra}</div>`:""}</div>`;
-};
+var currentScreen = 'dashboard';
 
-const MEETINGS=[
-  {id:"m1",title:"Q2 Revenue Planning",date:dOff(-1),duration:90,attendees:["Eric Miller","Sarah Chen","Colin Mills"],items:4},
-  {id:"m2",title:"Patel Foundation — Asset Review",date:dOff(-3),duration:45,attendees:["Eric Miller","James Okafor"],items:3},
-  {id:"m3",title:"Four Seasons Charleston Ops",date:dOff(-5),duration:60,attendees:["Eric Miller","Priya Nair","Tom Walsh"],items:3},
-  {id:"m4",title:"JW Marriott F&B Strategy",date:dOff(-8),duration:75,attendees:["Eric Miller","Colin Mills","Maria Lopez","Sarah Chen"],items:4},
-];
-const ITEMS=[
-  {id:"i1",mid:"m1",title:"Finalize Latitude 28 pricing model and deliver to GM",assignee:"Eric Miller",status:"in_progress",priority:"high",due:dOff(2)},
-  {id:"i2",mid:"m1",title:"Submit revised IT budget proposal to Marriott corporate",assignee:"Sarah Chen",status:"open",priority:"medium",due:dOff(7)},
-  {id:"i3",mid:"m1",title:"Rebid kitchen cleaning contract — minimum 3 vendors",assignee:"Colin Mills",status:"open",priority:"high",due:dOff(4)},
-  {id:"i4",mid:"m1",title:"Prepare Q3 F&B performance summary for ownership",assignee:"Eric Miller",status:"open",priority:"low",due:dOff(14)},
-  {id:"i5",mid:"m2",title:"Draft Asset Management Agreement Section 4 threshold language",assignee:"Eric Miller",status:"in_progress",priority:"high",due:dOff(3)},
-  {id:"i6",mid:"m2",title:"Confirm NSU lease renewal terms with legal counsel",assignee:"James Okafor",status:"open",priority:"medium",due:dOff(10)},
-  {id:"i7",mid:"m2",title:"Schedule quarterly board presentation for May",assignee:"James Okafor",status:"open",priority:"low",due:dOff(20)},
-  {id:"i8",mid:"m3",title:"Submit Lutron RFQ to Smartcon and Trident",assignee:"Eric Miller",status:"complete",priority:"high",due:dOff(-2)},
-  {id:"i9",mid:"m3",title:"Coordinate model room Gantt with construction lead",assignee:"Priya Nair",status:"complete",priority:"medium",due:dOff(-1)},
-  {id:"i10",mid:"m3",title:"Review sailcloth tent proposal with ownership group",assignee:"Tom Walsh",status:"overdue",priority:"high",due:dOff(-3)},
-  {id:"i11",mid:"m4",title:"Finalize side letter redline — iManage #3997967",assignee:"Eric Miller",status:"complete",priority:"high",due:dOff(-5)},
-  {id:"i12",mid:"m4",title:"Update Reserve contribution schedule with finance",assignee:"Colin Mills",status:"complete",priority:"medium",due:dOff(-4)},
-  {id:"i13",mid:"m4",title:"Clearwater F&B comp set pricing refresh",assignee:"Maria Lopez",status:"complete",priority:"low",due:dOff(-3)},
-  {id:"i14",mid:"m4",title:"Send Q2 performance deck to ownership",assignee:"Sarah Chen",status:"complete",priority:"medium",due:dOff(-2)},
-];
-const EMAILS=[
-  {recipient:"eric@redpenguin.com",subject:"Action items from Q2 Revenue Planning",status:"sent",provider:"O365",ts:dOff(-1)},
-  {recipient:"s.chen@jwmarriott.com",subject:"Action items from Q2 Revenue Planning",status:"sent",provider:"O365",ts:dOff(-1)},
-  {recipient:"t.walsh@fourseasons.com",subject:"Reminder: Overdue action item",status:"failed",provider:"O365",ts:dOff(-1),error:"550 Mailbox not found"},
-  {recipient:"j.okafor@patelfoundation.org",subject:"Action items from Patel Foundation Review",status:"sent",provider:"O365",ts:dOff(-3)},
-  {recipient:"c.mills@jwmarriott.com",subject:"Action items from JW Marriott F&B Strategy",status:"sent",provider:"O365",ts:dOff(-8)},
-];
-const TEAM=[
-  {name:"Eric Miller",email:"eric@redpenguin.com",role:"Admin",open:3,done:3,overdue:0},
-  {name:"Sarah Chen",email:"s.chen@jwmarriott.com",role:"Member",open:1,done:2,overdue:0},
-  {name:"Colin Mills",email:"c.mills@jwmarriott.com",role:"Member",open:1,done:2,overdue:0},
-  {name:"James Okafor",email:"j.okafor@patelfoundation.org",role:"Member",open:2,done:0,overdue:0},
-  {name:"Priya Nair",email:"p.nair@fourseasons.com",role:"Member",open:0,done:1,overdue:0},
-  {name:"Tom Walsh",email:"t.walsh@fourseasons.com",role:"Member",open:0,done:0,overdue:1},
-  {name:"Maria Lopez",email:"m.lopez@jwmarriott.com",role:"Member",open:0,done:1,overdue:0},
-];
-
-const badge=s=>{const m={open:"b-open Open",in_progress:"b-progress In Progress",complete:"b-done Complete",overdue:"b-overdue Overdue"};const p=(m[s]||"b-open Open").split(" ");return`<span class="badge ${p[0]}"><span class="badge-dot"></span>${p.slice(1).join(" ")}</span>`;};
-const prio=p=>{const m={high:"p-high HIGH",medium:"p-med MED",low:"p-low LOW"};const[c,l]=(m[p]||"p-low LOW").split(" ");return`<span class="prio ${c}">${l}</span>`;};
-const mtg=id=>MEETINGS.find(m=>m.id===id);
-
-function show(s){
-  document.querySelectorAll(".nav-item").forEach(b=>b.classList.toggle("active",b.getAttribute("onclick").includes("'"+s+"'")));
-  const mc=document.getElementById("mc");
-  if(s==="dashboard")mc.innerHTML=dashHtml();
-  else if(s==="items")mc.innerHTML=itemsHtml("all");
-  else if(s==="meetings")mc.innerHTML=meetingsHtml();
-  else if(s==="email")mc.innerHTML=emailHtml();
-  else if(s==="team")mc.innerHTML=teamHtml();
+function showScreen(name, navEl) {
+  document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
+  document.querySelectorAll('.nav-item').forEach(function(n) { n.classList.remove('active'); });
+  document.getElementById('screen-' + name).classList.add('active');
+  if (navEl) navEl.classList.add('active');
+  currentScreen = name;
+  var breadcrumbs = { dashboard: '<span>Dashboard</span>', minutes: '<span>Minutes</span>', actions: '<span>Action items</span>', meetings: '<span>Meetings</span>', email: '<span>Email log</span>', team: '<span>Team</span>' };
+  document.getElementById('breadcrumb').innerHTML = breadcrumbs[name] || '<span>' + name + '</span>';
+  var sendBar = document.getElementById('sendBar');
+  if (name === 'minutes') { sendBar.style.display = 'flex'; } else { sendBar.style.display = 'none'; }
 }
 
-function dashHtml(){
-  const open=ITEMS.filter(i=>i.status==="open").length;
-  const inp=ITEMS.filter(i=>i.status==="in_progress").length;
-  const od=ITEMS.filter(i=>i.status==="overdue").length;
-  const done=ITEMS.filter(i=>i.status==="complete").length;
-  const recent=ITEMS.filter(i=>i.status!=="complete").slice(0,5);
-  return`<div class="screen">
-<div class="page-header"><div class="page-title">Good morning, Eric</div><div class="page-sub">Here's what needs attention today</div></div>
-<div class="stat-row">
-  <div class="stat"><div class="stat-label">Open</div><div class="stat-val">${open}</div><div class="stat-sub">action items</div></div>
-  <div class="stat"><div class="stat-label">In Progress</div><div class="stat-val" style="color:var(--amber)">${inp}</div><div class="stat-sub">being worked on</div></div>
-  <div class="stat${od?" stat-danger":""}"><div class="stat-label">Overdue</div><div class="stat-val" style="color:var(--red)">${od}</div><div class="stat-sub">need immediate action</div></div>
-  <div class="stat"><div class="stat-label">Completed</div><div class="stat-val" style="color:var(--green)">${done}</div><div class="stat-sub">this month</div></div>
-</div>
-<div class="section-head"><div class="section-title">Open action items</div><button class="section-action" onclick="show('items')">View all →</button></div>
-<div class="card">
-  <div class="table-head g-items"><div>Task</div><div>Assignee</div><div>Status</div><div>Priority</div><div>Due</div></div>
-  ${recent.map(i=>`<div class="table-row g-items">
-    <div><div class="cell-main">${i.title}</div><div class="cell-sub">${mtg(i.mid)?.title||""}</div></div>
-    <div class="assignee-cell">${av(i.assignee)}<span class="cell" style="font-size:13px;">${i.assignee.split(" ")[0]}</span></div>
-    <div>${badge(i.status)}</div><div>${prio(i.priority)}</div>
-    <div class="cell-mono">${fmt(i.due)}</div>
-  </div>`).join("")}
-</div>
-<div class="section-head"><div class="section-title">Recent meetings</div><button class="section-action" onclick="show('meetings')">View all →</button></div>
-<div class="card">
-  <div class="table-head g-meetings"><div>Meeting</div><div>Date</div><div>Duration</div><div>Attendees</div><div>Items</div></div>
-  ${MEETINGS.slice(0,3).map(m=>`<div class="table-row g-meetings">
-    <div class="cell-main">${m.title}</div>
-    <div class="cell-mono">${fmt(m.date)}</div>
-    <div class="cell">${m.duration}m</div>
-    <div>${avatarStack(m.attendees)}</div>
-    <div class="cell-mono">${m.items}</div>
-  </div>`).join("")}
-</div></div>`;
+function toggleGroup(group) {
+  group.classList.toggle('closed');
 }
 
-function itemsHtml(filter){
-  const filtered=filter==="all"?ITEMS:ITEMS.filter(i=>i.status===filter);
-  const counts={all:ITEMS.length,open:0,in_progress:0,overdue:0,complete:0};
-  ITEMS.forEach(i=>counts[i.status]=(counts[i.status]||0)+1);
-  return`<div class="screen">
-<div class="page-header"><div class="page-title">Action Items</div><div class="page-sub">${ITEMS.length} items across ${MEETINGS.length} meetings</div></div>
-<div class="filter-row">
-  ${[["all","All"],["open","Open"],["in_progress","In Progress"],["overdue","Overdue"],["complete","Complete"]].map(([f,l])=>`<button class="filter-btn${filter===f?" active":""}" onclick="show_items('${f}')">${l}<span class="filter-count">${counts[f]||0}</span></button>`).join("")}
-</div>
-<div class="card">
-  <div class="table-head g-items"><div>Task</div><div>Assignee</div><div>Status</div><div>Priority</div><div>Due</div></div>
-  ${filtered.length===0?`<div class="empty">No items</div>`:filtered.map(i=>`<div class="table-row g-items">
-    <div><div class="cell-main">${i.title}</div><div class="cell-sub">${mtg(i.mid)?.title||""}</div></div>
-    <div class="assignee-cell">${av(i.assignee)}<span class="cell" style="font-size:13px;">${i.assignee}</span></div>
-    <div>${badge(i.status)}</div><div>${prio(i.priority)}</div>
-    <div class="cell-mono" style="${i.status==="overdue"?"color:var(--red)":""}">${fmt(i.due)}</div>
-  </div>`).join("")}
-</div></div>`;
-}
-function show_items(f){document.getElementById("mc").innerHTML=itemsHtml(f);}
-
-function meetingsHtml(){
-  return`<div class="screen">
-<div class="page-header"><div class="page-title">Meetings</div><div class="page-sub">${MEETINGS.length} meetings processed · ${ITEMS.length} action items extracted</div></div>
-<div class="card">
-  <div class="table-head g-meetings"><div>Meeting</div><div>Date</div><div>Duration</div><div>Attendees</div><div>Items</div></div>
-  ${MEETINGS.map(m=>`<div class="table-row g-meetings">
-    <div><div class="cell-main">${m.title}</div><div class="cell-sub">${m.attendees.join(", ")}</div></div>
-    <div class="cell-mono">${fmt(m.date)}</div>
-    <div class="cell">${m.duration}m</div>
-    <div>${avatarStack(m.attendees)}</div>
-    <div><span class="cell-mono" style="color:var(--accent);">${m.items} extracted</span></div>
-  </div>`).join("")}
-</div></div>`;
+function selectMinute(el) {
+  document.querySelectorAll('.minute-item').forEach(function(i) { i.classList.remove('active'); });
+  el.classList.add('active');
 }
 
-function emailHtml(){
-  const sent=EMAILS.filter(e=>e.status==="sent").length;
-  const failed=EMAILS.filter(e=>e.status==="failed").length;
-  return`<div class="screen">
-<div class="page-header"><div class="page-title">Email Log</div><div class="page-sub">Notification delivery history</div></div>
-<div class="stat-row-3">
-  <div class="stat"><div class="stat-label">Sent</div><div class="stat-val" style="color:var(--green)">${sent}</div><div class="stat-sub">delivered successfully</div></div>
-  <div class="stat${failed?" stat-danger":""}"><div class="stat-label">Failed</div><div class="stat-val" style="color:var(--red)">${failed}</div><div class="stat-sub">delivery errors</div></div>
-  <div class="stat"><div class="stat-label">Provider</div><div class="stat-val" style="font-size:18px;">O365</div><div class="stat-sub">Microsoft Graph</div></div>
-</div>
-<div class="card">
-  <div class="table-head g-email"><div>Recipient</div><div>Subject</div><div>Status</div><div>Provider</div><div>Date</div></div>
-  ${EMAILS.map(e=>`<div class="table-row g-email">
-    <div class="cell-mono">${e.recipient}</div>
-    <div><div class="cell-main" style="font-weight:400;">${e.subject}</div>${e.error?`<div class="cell-sub" style="color:var(--red);">${e.error}</div>`:""}</div>
-    <div><span class="badge ${e.status==="sent"?"b-done":"b-overdue"}"><span class="badge-dot"></span>${e.status}</span></div>
-    <div class="cell-mono">${e.provider}</div>
-    <div class="cell-mono">${fmt(e.ts)}</div>
-  </div>`).join("")}
-</div></div>`;
+function toggleCheck(el) {
+  el.classList.toggle('done');
+  var textEl = el.closest('.task-card-row').querySelector('.task-text');
+  if (textEl) textEl.classList.toggle('done');
 }
 
-function teamHtml(){
-  const od=TEAM.filter(m=>m.overdue>0).length;
-  const active=TEAM.filter(m=>m.open>0||m.overdue>0).length;
-  return`<div class="screen">
-<div class="page-header"><div class="page-title">Team</div><div class="page-sub">${TEAM.length} members · auto-detected from Zoom participants</div></div>
-<div class="stat-row-3">
-  <div class="stat"><div class="stat-label">Members</div><div class="stat-val">${TEAM.length}</div><div class="stat-sub">auto-detected from Zoom</div></div>
-  <div class="stat"><div class="stat-label">Active</div><div class="stat-val" style="color:var(--accent)">${active}</div><div class="stat-sub">have open items</div></div>
-  <div class="stat${od?" stat-danger":""}"><div class="stat-label">Overdue</div><div class="stat-val" style="color:var(--red)">${od}</div><div class="stat-sub">members with overdue items</div></div>
-</div>
-<div class="section-head"><div class="section-title">Members</div><span class="zoom-pill"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" style="opacity:.7"><rect x="1" y="4" width="9" height="8" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M10 7l4-2v6l-4-2V7z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg> synced from Zoom</span></div>
-<div class="team-cards">
-  ${TEAM.map(m=>`<div class="team-card">
-    ${av(m.name,38)}
-    <div style="flex:1;min-width:0;">
-      <div class="member-name">${m.name}</div>
-      <div class="member-email">${m.email}</div>
-      <div class="member-stats">
-        <span style="color:${m.overdue?"var(--red)":"var(--text2)"};">${m.open+m.overdue}</span> open &nbsp;·&nbsp;
-        <span style="color:var(--text2);">${m.done}</span> done
-        ${m.overdue?`&nbsp;·&nbsp; <span style="color:var(--red);">${m.overdue} overdue</span>`:""}
-      </div>
-    </div>
-    ${m.role==="Admin"?`<span class="badge b-done" style="align-self:flex-start;"><span class="badge-dot"></span>Admin</span>`:""}
-  </div>`).join("")}
-</div>
-<div class="card">
-  <div class="table-head g-team"><div>Member</div><div>Role</div><div>Open</div><div>Done</div><div>Overdue</div></div>
-  ${TEAM.map(m=>`<div class="table-row g-team">
-    <div class="assignee-cell">${av(m.name)}<div><div class="cell-main" style="font-size:13px;">${m.name}</div><div class="cell-sub">${m.email}</div></div></div>
-    <div class="cell">${m.role}</div>
-    <div class="cell-mono">${m.open}</div>
-    <div class="cell-mono" style="color:var(--green);">${m.done}</div>
-    <div class="cell-mono" style="${m.overdue?"color:var(--red);font-weight:500;":""}">${m.overdue||"—"}</div>
-  </div>`).join("")}
-</div></div>`;
+function toggleBetty() {
+  document.getElementById('bettyPanel').classList.toggle('open');
 }
 
-show("dashboard");
+function dismissAlert(btn) {
+  var alert = btn.closest('.betty-alert');
+  alert.style.opacity = '0';
+  alert.style.transform = 'translateX(10px)';
+  alert.style.transition = 'all 0.2s ease';
+  setTimeout(function() {
+    alert.remove();
+    var remaining = document.querySelectorAll('.betty-alert').length;
+    var notif = document.querySelector('.betty-notif span');
+    if (notif) notif.textContent = remaining;
+    var state = document.querySelector('.betty-panel-state');
+    if (state) state.textContent = remaining + ' thing' + (remaining !== 1 ? 's' : '') + ' need your attention';
+    if (remaining === 0) {
+      document.querySelector('.betty-notif').style.display = 'none';
+      document.querySelector('.betty-ring').style.display = 'none';
+    }
+  }, 200);
+}
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = el.scrollHeight + 'px';
+}
+
+document.querySelectorAll('.filter-chip').forEach(function(chip) {
+  chip.addEventListener('click', function() {
+    document.querySelectorAll('.filter-chip').forEach(function(c) { c.classList.remove('active'); });
+    this.classList.add('active');
+  });
+});
+
+showScreen('dashboard', document.querySelector('.nav-item.active'));
 </script>
 </body>
 </html>
