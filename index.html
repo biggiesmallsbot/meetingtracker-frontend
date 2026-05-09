@@ -394,7 +394,7 @@ body { font-family: var(--font); font-size: 14px; color: var(--text); background
       <div class="dash-main">
         <div class="welcome-row">
           <div class="welcome-text">
-            <h2>Good morning, Eric</h2>
+            <h2 id="greeting-name">Good morning, Eric</h2>
             <p>Sunday, April 12 · 3 meetings need your review</p>
           </div>
         </div>
@@ -426,7 +426,7 @@ body { font-family: var(--font); font-size: 14px; color: var(--text); background
           <div class="section-title">My open tasks <span class="pill pill-amber">8 open</span></div>
           <button class="btn btn-ghost" onclick="showScreen('actions', document.querySelector('[onclick*=actions]'))">View all</button>
         </div>
-        <div class="task-card" style="margin-bottom:20px">
+        <div class="task-card" id="dashboard-tasks" style="margin-bottom:20px">
           <div class="task-card-row header">
             <span></span><span>Task</span><span>Assignee</span><span>Due</span><span>Priority</span>
           </div>
@@ -1020,7 +1020,7 @@ function prioClass(p) { return p==='high'?'h':p==='low'?'l':'m'; }
   if (!getToken()) { window.location.href = '/login.html'; return; }
   var name = localStorage.getItem('mt_user_name') || 'there';
   var wsName = localStorage.getItem('mt_workspace_name') || 'My Workspace';
-  var greetEl = document.querySelector('.greeting-name');
+  var greetEl = document.getElementById("greeting-name");
   if (greetEl) greetEl.textContent = 'Good morning, ' + name.split(' ')[0];
   var wsEl = document.querySelector('.ws-name');
   if (wsEl) wsEl.textContent = wsName;
@@ -1035,7 +1035,7 @@ function loadDashboard() {
     var inProg = items.filter(function(i){return i.status==='in_progress';}).length;
     var overdue = items.filter(function(i){return i.status==='overdue';}).length;
     var done = items.filter(function(i){return i.status==='complete';}).length;
-    var statEls = document.querySelectorAll('.stat-val');
+    var statEls = document.querySelectorAll(".stat-num");
     if (statEls[0]) statEls[0].textContent = open;
     if (statEls[1]) statEls[1].textContent = inProg;
     if (statEls[2]) statEls[2].textContent = overdue;
