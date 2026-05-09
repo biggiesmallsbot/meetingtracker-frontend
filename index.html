@@ -993,6 +993,151 @@ document.querySelectorAll('.filter-chip').forEach(function(chip) {
 });
 
 showScreen('dashboard', document.querySelector('.nav-item.active'));
+showScreen('dashboard', document.querySelector('.nav-item.active'));
+</script>
+
+<script>
+var BACKEND = 'https://meetingtracker-backend-production.up.railway.app';
+function getToken() { return localStorage.getItem('mt_access_token'); }
+function api(path, opts) {
+  var token = getToken();
+  if (!token) { window.location.href = '/login.html'; return Promise.reject('no token'); }
+  var options = opts || {};
+  options.headers = options.headers || {};
+  options.headers['Authorization'] = 'Bearer ' + token;
+  options.headers['Content-Type'] = 'application/json';
+  return fetch(BACKEND + path, options).then(function(r) {
+    if (r.status === 401) { window.location.href = '/login.html'; return Promise.reject('unauthorized'); }
+    return r.json();
+  });
+}
+function fmt(d) { if (!d) return ''; return new Date(d).toLocaleDateString('en-US',{month:'short',day:'numeric'}); }
+function fmtLong(d) { if (!d) return ''; return new Date(d).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); }
+function initials(n) { if (!n) return '?'; return n.split(' ').map(function(w){return w[0];}).join('').toUpperCase().slice(0,2); }
+function prioClass(p) { return p==='high'?'h':p==='low'?'l':'m'; }
+
+(function(){
+  if (!getToken()) { window.location.href = '/login.html'; return; }
+  var name = localStorage.getItem('mt_user_name') || 'there';
+  var wsName = localStorage.getItem('mt_workspace_name') || 'My Workspace';
+  var greetEl = document.querySelector('.greeting-name');
+  if (greetEl) greetEl.textContent = 'Good morning, ' + name.split(' ')[0];
+  var wsEl = document.querySelector('.ws-name');
+  if (wsEl) wsEl.textContent = wsName;
+  loadDashboard();
+  loadMinutesList();
+})();
+
+function loadDashboard() {
+  api('/api/items').then(function(items) {
+    if (!Array.isArray(items)) return;
+    var open = items.filter(function(i){return i.status==='open';}).length;
+    var inProg = items.filter(function(i){return i.status==='in_progress';}).length;
+    var overdue = items.filter(function(i){return i.status==='overdue';}).length;
+    var done = items.filter(function(i){return i.status==='complete';}).length;
+    var statEls = document.querySelectorAll('.stat-val');
+    if (statEls[0]) statEls[0].textContent = open;
+    if (statEls[1]) statEls[1].textContent = inProg;
+    if (statEls[2]) statEls[2].textContent = overdue;
+    if (statEls[3]) statEls[3].textContent = done;
+    var taskList = document.getElementById('dashboard-tasks');
+    if (taskList && items.length) {
+      var pending = items.filter(function(i){return i.status!=='complete';}).slice(0,5);
+      taskList.innerHTML = pending.map(function(item){
+        return '<div class="task-card-row">'+
+          '<div class="task-check" onclick="completeItem(\''+item.id+'\',this)"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>'+
+          '<div><div class="task-text">'+(item.description||'')+'</div></div>'+
+          '<div class="assignee-cell"><div class="mini-av" style="background:#2563eb">'+initials(item.assignee_name)+'</div>'+(item.assignee_name||'')+'</div>'+
+          '<div class="due-cell">'+fmt(item.due_date)+'</div>'+
+          '<span class="pri pri-'+prioClass(item.priority)+'">'+(item.priority||'med').charAt(0).toUpperCase()+'</span>'+
+          '</div>';
+      }).join('');
+    }
+  }).catch(function(e){console.log('Dashboard error:',e);});
+}
+
+function loadMinutesList() {
+  api('/api/minutes').then(function(minutes) {
+    if (!Array.isArray(minutes)) return;
+    var list = document.getElementById('minutes-list');
+    if (!list) return;
+    if (!minutes.length) {
+      list.innerHTML = '<div style="padding:24px;text-align:center;color:var(--text3);font-size:13px;">No meetings yet. Run a Zoom meeting and Betty will capture it.</div>';
+      return;
+    }
+    list.innerHTML = minutes.map(function(m){
+      var title = (m.meetings&&m.meetings.title)||'Untitled Meeting';
+      var date = fmt(m.meetings&&m.meetings.date);
+      var statusColor = m.status==='sent'?'#2d9e6e':m.status==='draft'?'#c08b1a':'#6b6b6b';
+      return '<div class="minute-item" onclick="selectMinute(this)" data-id="'+m.id+'">'+
+        '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:3px">'+
+        '<span style="font-size:13px;font-weight:500;color:var(--text)">'+title+'</span>'+
+        '<span style="font-size:10px;color:'+statusColor+';font-weight:500;text-transform:uppercase">'+m.status+'</span>'+
+        '</div>'+
+        '<div style="font-size:11px;color:var(--text3)">'+date+'</div>'+
+        '</div>';
+    }).join('');
+    var firstDraft = minutes.find(function(m){return m.status==='draft';});
+    if (firstDraft) loadMinuteDetail(firstDraft.id);
+  }).catch(function(e){console.log('Minutes list error:',e);});
+}
+
+function loadMinuteDetail(id) {
+  api('/api/minutes/'+id).then(function(m) {
+    if (!m||!m.id) return;
+    window._currentMinutesId = id;
+    var titleEl = document.getElementById('minutes-title');
+    if (titleEl) titleEl.textContent = (m.meetings&&m.meetings.title)||'Meeting';
+    var dateEl = document.getElementById('minutes-date');
+    if (dateEl) dateEl.textContent = fmtLong(m.meetings&&m.meetings.date);
+    var notesEl = document.getElementById('minutes-notes');
+    if (notesEl) notesEl.textContent = m.notes||'';
+    var decisionsEl = document.getElementById('minutes-decisions');
+    if (decisionsEl) decisionsEl.textContent = m.decisions||'';
+    var items = m.action_items||[];
+    var itemsEl = document.getElementById('minutes-items');
+    if (itemsEl) {
+      itemsEl.innerHTML = items.map(function(item){
+        return '<div class="task-card-row">'+
+          '<div class="task-check"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>'+
+          '<div><div class="task-text">'+(item.description||item.action||'')+'</div></div>'+
+          '<div class="assignee-cell">'+(item.assignee_name||item.assignee||'')+'</div>'+
+          '<div class="due-cell">'+fmt(item.due_date)+'</div>'+
+          '</div>';
+      }).join('');
+    }
+  }).catch(function(e){console.log('Minutes detail error:',e);});
+}
+
+function completeItem(id, el) {
+  el.classList.add('done');
+  api('/api/items/'+id, {method:'PATCH',body:JSON.stringify({status:'complete'})})
+    .catch(function(){el.classList.remove('done');});
+}
+
+function sendMinutes() {
+  var id = window._currentMinutesId;
+  if (!id) { alert('No minutes selected'); return; }
+  var email = localStorage.getItem('mt_user_email')||'';
+  if (!email) { alert('No email in session'); return; }
+  var btn = document.getElementById('sendBtn');
+  if (btn) btn.textContent = 'Sending...';
+  api('/api/minutes/'+id+'/send', {method:'POST',body:JSON.stringify({recipients:[email]})})
+    .then(function(r){
+      if (r.sent) {
+        if (btn) btn.textContent = 'Sent!';
+        setTimeout(function(){if(btn)btn.textContent='Approve & send';},3000);
+        loadMinutesList();
+      }
+    }).catch(function(){if(btn)btn.textContent='Approve & send';});
+}
+
+var _origSelectMinute = selectMinute;
+selectMinute = function(el) {
+  _origSelectMinute(el);
+  var id = el.getAttribute('data-id');
+  if (id) loadMinuteDetail(id);
+};
 </script>
 </body>
 </html>
